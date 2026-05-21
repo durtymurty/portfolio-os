@@ -16,9 +16,7 @@ export default function ResumeApp() {
         <h2 style={{ fontSize: "13px", fontWeight: "600", color: "#58a6ff", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "12px" }}>Education</h2>
         <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           {[
-            { school: "Cal Poly SLO", degree: "B.S. Computer Engineering", period: "2025 – 2029" },
-            { school: "Bellevue College", degree: "Running Start", period: "2024 – 2025" },
-            { school: "Central Washington University", degree: "Running Start", period: "2023 – 2024" },
+            { school: "Cal Poly SLO", degree: "B.S. Computer Engineering", period: "2025 – 2029" }
           ].map(edu => (
             <div key={edu.school} style={{ padding: "12px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>

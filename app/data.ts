@@ -121,8 +121,6 @@ LinkedIn: linkedin.com/in/murtazabootwala25
 GitHub:   github.com/durtymurty
 Phone:    425-394-9539`,
   education: `Cal Poly SLO — B.S. Computer Engineering (2025–2029)
-Bellevue College — Running Start (2024–2025)
-Central Washington University — Running Start (2023–2024)
 Skyline High School (2021–2025)`,
   whoami: `murtaza@portfolio:~$ A builder. An engineer. A problem solver.`,
   clear: "__CLEAR__",
