@@ -132,7 +132,7 @@ export default function Home() {
         display: openWindows.length > 0 ? "none" : "block",
       }}>
         <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.25)", letterSpacing: "4px", textTransform: "uppercase", marginBottom: "16px" }}>Hi, I'm Murtaza 👋</p>
-        <h1 style={{ fontSize: "52px", fontWeight: "700", color: "rgba(255,255,255,0.06)", letterSpacing: "6px", textTransform: "uppercase", marginBottom: "16px" }}>MURTAZA</h1>
+        <h1 style={{ fontSize: "52px", fontWeight: "700", color: "rgba(255,255,255,0.06)", letterSpacing: "6px", textTransform: "uppercase", marginBottom: "16px" }}>PORTFOLIO</h1>
         <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.3)", letterSpacing: "1px" }}>
           Computer Engineering @ Cal Poly '29
         </p>
