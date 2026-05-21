@@ -47,7 +47,7 @@ export const PROJECTS = [
     name: "Dev Portfolio OS",
     description: "This portfolio! Built as a fully functional desktop OS experience with draggable windows, a taskbar, and multiple apps.",
     tech: ["Next.js", "TypeScript", "Tailwind CSS"],
-    github: "https://github.com/durtymurty",
+    github: "https://github.com/durtymurty/portfolio-os",
     emoji: "🖥️",
     color: "#f97316",
   },
