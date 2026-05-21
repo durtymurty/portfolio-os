@@ -25,7 +25,6 @@ export default function AboutApp() {
             { icon: "✉️", label: PROFILE.email, href: `mailto:${PROFILE.email}` },
             { icon: "💼", label: "linkedin.com/in/murtazabootwala25", href: PROFILE.linkedin },
             { icon: "🐙", label: "github.com/durtymurty", href: PROFILE.github },
-            { icon: "📱", label: PROFILE.phone, href: `tel:${PROFILE.phone}` },
           ].map(item => (
             <a key={item.label} href={item.href} target="_blank" rel="noreferrer"
               style={{ display: "flex", gap: "10px", alignItems: "center", fontSize: "13px", color: "#8b949e", textDecoration: "none", padding: "8px 12px", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.06)" }}

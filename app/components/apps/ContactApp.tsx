@@ -12,7 +12,6 @@ export default function ContactApp() {
           { icon: "✉️", label: "Email", value: PROFILE.email, href: `mailto:${PROFILE.email}`, color: "#58a6ff" },
           { icon: "💼", label: "LinkedIn", value: "murtazabootwala25", href: PROFILE.linkedin, color: "#0077b5" },
           { icon: "🐙", label: "GitHub", value: "durtymurty", href: PROFILE.github, color: "#f0f6fc" },
-          { icon: "📱", label: "Phone", value: PROFILE.phone, href: `tel:${PROFILE.phone}`, color: "#3fb950" },
         ].map(item => (
           <a key={item.label} href={item.href} target="_blank" rel="noreferrer"
             style={{ display: "flex", gap: "14px", alignItems: "center", padding: "16px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", textDecoration: "none", transition: "all 0.2s" }}
