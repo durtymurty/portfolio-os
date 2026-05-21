@@ -131,18 +131,14 @@ export default function Home() {
         textAlign: "center", pointerEvents: "none",
         display: openWindows.length > 0 ? "none" : "block",
       }}>
-        <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.3)", letterSpacing: "4px", textTransform: "uppercase", marginBottom: "16px" }}>Welcome to my portfolio</p>
-        <h1 style={{ fontSize: "52px", fontWeight: "700", color: "rgba(255,255,255,0.08)", letterSpacing: "6px", textTransform: "uppercase", marginBottom: "16px" }}>PORTFOLIO</h1>
-        <p style={{ fontSize: "14px", color: "rgba(255,255,255,0.25)", letterSpacing: "1px" }}>
-          Hi, I'm Murtaza 👋 — Click any app below to explore
+        <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.25)", letterSpacing: "4px", textTransform: "uppercase", marginBottom: "16px" }}>Hi, I'm Murtaza 👋</p>
+        <h1 style={{ fontSize: "52px", fontWeight: "700", color: "rgba(255,255,255,0.06)", letterSpacing: "6px", textTransform: "uppercase", marginBottom: "16px" }}>MURTAZA</h1>
+        <p style={{ fontSize: "15px", color: "rgba(255,255,255,0.3)", letterSpacing: "1px" }}>
+          Computer Engineering @ Cal Poly '29
         </p>
-        <div style={{ display: "flex", gap: "8px", justifyContent: "center", marginTop: "20px", flexWrap: "wrap", maxWidth: "400px", margin: "20px auto 0" }}>
-          {["About Me", "Projects", "Resume", "Terminal"].map(hint => (
-            <span key={hint} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "20px", padding: "4px 12px", fontSize: "11px", color: "rgba(255,255,255,0.3)" }}>
-              {hint}
-            </span>
-          ))}
-        </div>
+        <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.18)", marginTop: "10px" }}>
+          Click any app below to explore ↓
+        </p>
       </div>
 
       {/* Windows */}
