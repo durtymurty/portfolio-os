@@ -119,8 +119,7 @@ Engineering: CAD, CNC, Carbon Fiber, Robotics`,
   contact: `Email:    mbootwal@calpoly.edu
 LinkedIn: linkedin.com/in/murtazabootwala25
 GitHub:   github.com/durtymurty`,
-  education: `Cal Poly SLO — B.S. Computer Engineering (2025–2029)
-Skyline High School (2021–2025)`,
+  education: `Cal Poly SLO — B.S. Computer Engineering (2025–2029)`,
   whoami: `murtaza@portfolio:~$ A builder. An engineer. A problem solver.`,
   clear: "__CLEAR__",
 };
