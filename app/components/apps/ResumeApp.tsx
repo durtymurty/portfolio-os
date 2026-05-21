@@ -5,7 +5,7 @@ export default function ResumeApp() {
     <div style={{ color: "#c9d1d9", display: "flex", flexDirection: "column", gap: "24px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <h1 style={{ fontSize: "20px", fontWeight: "700", color: "#f0f6fc" }}>Resume</h1>
-        <a href="mailto:murtazab2007@gmail.com"
+        <a href="mailto:mbootwal@calpoly.edu"
           style={{ fontSize: "12px", color: "#58a6ff", textDecoration: "none", padding: "6px 12px", background: "rgba(88,166,255,0.1)", border: "1px solid rgba(88,166,255,0.2)", borderRadius: "6px" }}
         >
           📧 Request Full Resume

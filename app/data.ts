@@ -116,10 +116,9 @@ Engineering: CAD, CNC, Carbon Fiber, Robotics`,
 [2] FoodSpect App          — Flutter + Dart
 [3] Collaborative Whiteboard — React + WebSockets
 [4] Portfolio OS           — Next.js + TypeScript`,
-  contact: `Email:    murtazab2007@gmail.com
+  contact: `Email:    mbootwal@calpoly.edu
 LinkedIn: linkedin.com/in/murtazabootwala25
-GitHub:   github.com/durtymurty
-Phone:    425-394-9539`,
+GitHub:   github.com/durtymurty`,
   education: `Cal Poly SLO — B.S. Computer Engineering (2025–2029)
 Skyline High School (2021–2025)`,
   whoami: `murtaza@portfolio:~$ A builder. An engineer. A problem solver.`,
