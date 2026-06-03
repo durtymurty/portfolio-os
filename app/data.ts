@@ -15,6 +15,7 @@ export const SKILLS = [
   { category: "Frontend", items: ["React", "Next.js", "Tailwind CSS", "Flutter"] },
   { category: "Backend", items: ["Node.js", "Express.js", "REST APIs"] },
   { category: "Tools", items: ["Git", "GitHub", "AWS", "VS Code"] },
+  { category: "AI/ML", items: ["Python", "Ollama", "Sentence Transformers", "LLM Evaluation", "Streamlit", "scikit-learn"] },
   { category: "Engineering", items: ["CAD Modeling", "CNC Operation", "Carbon Fiber", "Robotics"] },
 ];
 
@@ -36,12 +37,12 @@ export const PROJECTS = [
     color: "#3fb950",
   },
   {
-    name: "Real-time Collaborative Whiteboard - SOON",
-    description: "A real-time collaborative whiteboard where multiple users can draw and write together simultaneously using WebSockets.",
-    tech: ["React", "WebSockets", "Node.js", "Canvas API"],
-    github: "https://github.com/durtymurty",
-    emoji: "🎨",
-    color: "#d2a8ff",
+    name: "LLM Evaluation Framework",
+    description: "Local framework for evaluating and comparing LLMs using semantic similarity scoring, LLM-as-judge, and hallucination detection. Supports multi-model comparison with a live Streamlit dashboard.",
+    tech: ["Python", "Ollama", "Sentence Transformers", "Streamlit", "scikit-learn"],
+    github: "https://github.com/durtymurty/llm-eval",
+    emoji: "🧠",
+    color: "#a78bfa",
   },
   {
     name: "Dev Portfolio OS",
@@ -112,10 +113,10 @@ Frontend:    React, Next.js, Flutter, Tailwind
 Backend:     Node.js, Express, REST APIs
 Tools:       Git, AWS, VS Code
 Engineering: CAD, CNC, Carbon Fiber, Robotics`,
-  projects: `[1] AI Code Reviewer       — Next.js + Claude API
-[2] FoodSpect App          — Flutter + Dart
-[3] Collaborative Whiteboard — React + WebSockets
-[4] Portfolio OS           — Next.js + TypeScript`,
+  projects: `[1] AI Code Reviewer        — Next.js + Claude API
+[2] FoodSpect App           — Flutter + Dart
+[3] LLM Evaluation Framework — Python + Ollama + Streamlit
+[4] Portfolio OS            — Next.js + TypeScript`,
   contact: `Email:    mbootwal@calpoly.edu
 LinkedIn: linkedin.com/in/murtazabootwala25
 GitHub:   github.com/durtymurty`,
