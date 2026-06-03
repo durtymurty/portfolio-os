@@ -112,6 +112,7 @@ Currently building: AI tools, web apps, race cars`,
 Frontend:    React, Next.js, Flutter, Tailwind
 Backend:     Node.js, Express, REST APIs
 Tools:       Git, AWS, VS Code
+AI/ML:       Ollama, Sentence Transformers, LLM Evaluation, Streamlit
 Engineering: CAD, CNC, Carbon Fiber, Robotics`,
   projects: `[1] AI Code Reviewer        — Next.js + Claude API
 [2] FoodSpect App           — Flutter + Dart
