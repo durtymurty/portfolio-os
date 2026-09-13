@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getResume } from "../../lib/resume";
+import CommandPalette from "./CommandPalette";
 import ThemeToggle from "./ThemeToggle";
 
 export const NAV = [
@@ -49,6 +50,7 @@ export default function Header() {
             <span aria-hidden="true" className="font-mono text-xs">{resume.isFile ? "↓" : "→"}</span>
             {resume.isFile && <span className="sr-only"> (PDF, opens in a new tab)</span>}
           </a>
+          <CommandPalette resumeHref={resume.href} resumeIsFile={resume.isFile} />
           <ThemeToggle />
         </div>
       </div>
