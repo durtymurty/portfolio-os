@@ -32,13 +32,13 @@ function Taskbar({ windows, activeId, onLaunch }: TaskbarProps) {
                 className="dock-item flex w-14 flex-col items-center gap-0.5 rounded-lg outline-none"
               >
                 <span aria-hidden="true" className="dock-icon">{app.emoji}</span>
-                <span className={`max-w-full truncate text-[10px] ${win ? "text-accent" : "text-fg-muted"}`}>
+                <span className={`max-w-full truncate text-[10px] ${win ? "text-os-accent" : "text-fg-muted"}`}>
                   {app.title}
                   {status && <span className="sr-only">, {status}</span>}
                 </span>
                 <span
                   aria-hidden="true"
-                  className={`size-1 rounded-full ${win ? (win.minimized ? "bg-fg-muted" : "bg-accent shadow-[0_0_6px_#58a6ff]") : "bg-transparent"}`}
+                  className={`size-1 rounded-full ${win ? (win.minimized ? "bg-fg-muted" : "bg-os-accent shadow-[0_0_6px_#58a6ff]") : "bg-transparent"}`}
                 />
               </button>
             </li>

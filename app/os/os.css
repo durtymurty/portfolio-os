@@ -1,46 +1,19 @@
-@import "tailwindcss";
-
-@theme {
-  --color-bg: #07080f;
-  --color-surface: #13141e;
-  --color-raised: rgb(255 255 255 / 0.04);
-  --color-line: rgb(255 255 255 / 0.08);
-  --color-fg: #c9d1d9;
-  --color-fg-strong: #f0f6fc;
-  --color-fg-muted: #8b949e; /* 5.9:1 on surface */
-  --color-accent: #58a6ff;
-  --color-ok: #3fb950;
-  --color-danger: #f85149;
-
-  --taskbar-h: 5rem;
-}
-
-@theme inline {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains), ui-monospace, Consolas, monospace;
-}
-
-@layer base {
-  html,
-  body {
-    height: 100%;
-    overflow: hidden;
-    background: var(--color-bg);
-    color: var(--color-fg);
-    font-family: var(--font-sans);
-  }
-
-  :focus-visible {
-    outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-  }
-
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: rgb(0 0 0 / 0.2); }
-  ::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.2); border-radius: 3px; }
-}
+/* Styles for the /os desktop experience only. Tokens live in globals.css (@theme static). */
 
 @layer components {
+  .os-root {
+    position: fixed;
+    inset: 0;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-inter, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
+    user-select: none;
+  }
+  .os-root :focus-visible { outline-color: var(--color-accent); }
+  .os-root ::-webkit-scrollbar { width: 6px; height: 6px; }
+  .os-root ::-webkit-scrollbar-track { background: rgb(0 0 0 / 0.2); }
+  .os-root ::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.2); border-radius: 3px; }
+
   .window {
     position: absolute;
     display: flex;
@@ -145,13 +118,4 @@
 @keyframes blob3 {
   0%, 100% { transform: translate(0, 0) scale(1); }
   50% { transform: translate(30px, -40px) scale(1.1); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
 }

@@ -5,7 +5,7 @@ import { CONTACT_LINKS, PROFILE } from "../../data";
 import { AppTitle, ExternalLink, Icon } from "../ui";
 
 const cardClass =
-  "flex items-center gap-3.5 rounded-xl border border-line bg-raised p-4 transition-colors hover:border-accent/30 hover:bg-white/[0.06]";
+  "flex items-center gap-3.5 rounded-xl border border-line bg-raised p-4 transition-colors hover:border-os-accent/30 hover:bg-white/[0.06]";
 
 export default function ContactApp() {
   const [copied, setCopied] = useState(false);
@@ -44,7 +44,7 @@ export default function ContactApp() {
               ) : (
                 <div className="flex gap-2">
                   <a href={item.href} className={`${cardClass} flex-1`}>{body}</a>
-                  <button type="button" onClick={copyEmail} className={`${cardClass} shrink-0 text-xs text-accent`}>
+                  <button type="button" onClick={copyEmail} className={`${cardClass} shrink-0 text-xs text-os-accent`}>
                     {copied ? "Copied!" : "Copy"}
                   </button>
                 </div>

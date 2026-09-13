@@ -22,7 +22,7 @@ export function AppTitle({ children, className = "" }: WithChildren) {
 export function SectionHeading({ children, color }: { children: ReactNode; color?: string }) {
   return (
     <h3
-      className="mb-3 text-xs font-semibold uppercase tracking-widest text-accent"
+      className="mb-3 text-xs font-semibold uppercase tracking-widest text-os-accent"
       style={color ? { color } : undefined}
     >
       {children}
@@ -58,4 +58,4 @@ export function ExternalLink({
 }
 
 export const buttonClass =
-  "inline-flex items-center gap-1.5 rounded-md border border-accent/20 bg-accent/10 px-3 py-1.5 text-xs text-accent transition-colors hover:bg-accent/20";
+  "inline-flex items-center gap-1.5 rounded-md border border-os-accent/20 bg-os-accent/10 px-3 py-1.5 text-xs text-os-accent transition-colors hover:bg-os-accent/20";

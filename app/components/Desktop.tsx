@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useReducer } from "react";
 import { PROFILE } from "../data";
 import { COMPACT_QUERY, useMediaQuery } from "../lib/hooks";
@@ -39,8 +40,15 @@ export default function Desktop() {
 
   return (
     <main className="relative h-dvh w-screen overflow-hidden">
-      <h1 className="sr-only">{PROFILE.name} — {PROFILE.title}</h1>
+      <h1 className="sr-only">{PROFILE.name} — Portfolio OS</h1>
       <Backdrop />
+
+      <Link
+        href="/"
+        className="absolute top-4 left-4 z-[5] rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-fg-muted transition-colors hover:text-fg-strong"
+      >
+        ← Back to portfolio
+      </Link>
 
       <div
         inert={activeId !== null}

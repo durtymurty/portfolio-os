@@ -67,7 +67,7 @@ export default function FileExplorerApp() {
             aria-current={f.name === folderName}
             onClick={() => { setFolderName(f.name); setItemName(null); }}
             className={`shrink-0 rounded-md px-2.5 py-2 text-left text-[13px] ${
-              f.name === folderName ? "bg-accent/10 text-accent" : "text-fg hover:bg-white/5"
+              f.name === folderName ? "bg-os-accent/10 text-os-accent" : "text-fg hover:bg-white/5"
             }`}
           >
             <Icon>📁</Icon> {f.name}

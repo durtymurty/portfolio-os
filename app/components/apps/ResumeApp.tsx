@@ -39,7 +39,7 @@ export default function ResumeApp() {
                 <div className="mb-1.5 flex justify-between gap-3">
                   <div>
                     <h4 className="text-sm font-semibold text-fg-strong">{exp.role}</h4>
-                    <p className="text-xs text-accent">{exp.company}</p>
+                    <p className="text-xs text-os-accent">{exp.company}</p>
                   </div>
                   <span className="shrink-0 text-[11px] text-fg-muted">{exp.period}</span>
                 </div>

@@ -2,18 +2,18 @@ import { CERTIFICATIONS, CONTACT_LINKS, PROFILE } from "../../data";
 import { Card, ExternalLink, Icon, SectionHeading } from "../ui";
 
 const linkRow =
-  "flex items-center gap-2.5 rounded-lg border border-white/5 bg-raised px-3 py-2 text-[13px] text-accent transition-colors hover:border-accent/30";
+  "flex items-center gap-2.5 rounded-lg border border-white/5 bg-raised px-3 py-2 text-[13px] text-os-accent transition-colors hover:border-os-accent/30";
 
 export default function AboutApp() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center gap-5">
-        <div aria-hidden="true" className="grid size-20 shrink-0 place-items-center rounded-full bg-linear-135 from-accent to-[#bc8cff] text-4xl">
+        <div aria-hidden="true" className="grid size-20 shrink-0 place-items-center rounded-full bg-linear-135 from-os-accent to-[#bc8cff] text-4xl">
           👨‍💻
         </div>
         <div>
           <h2 className="text-2xl font-bold text-fg-strong">{PROFILE.name}</h2>
-          <p className="mt-1 text-sm text-accent">{PROFILE.title}</p>
+          <p className="mt-1 text-sm text-os-accent">{PROFILE.title}</p>
           <p className="mt-0.5 text-xs text-fg-muted"><Icon>📍</Icon> {PROFILE.location}</p>
         </div>
       </div>

@@ -153,7 +153,7 @@ export default function SnakeApp() {
         </div>
         <div className="text-center">
           <p className="text-[11px] text-fg-muted uppercase">Best</p>
-          <p className="text-3xl font-bold text-accent">{best}</p>
+          <p className="text-3xl font-bold text-os-accent">{best}</p>
         </div>
       </div>
 

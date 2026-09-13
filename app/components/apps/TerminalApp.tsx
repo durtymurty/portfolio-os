@@ -80,7 +80,7 @@ export default function TerminalApp() {
     >
       <div ref={scrollRef} role="log" aria-live="polite" className="mb-3 min-h-0 flex-1 overflow-y-auto">
         {lines.map((line) => (
-          <div key={line.id} className={`leading-relaxed whitespace-pre-wrap ${line.kind === "input" ? "text-accent" : "text-fg"}`}>
+          <div key={line.id} className={`leading-relaxed whitespace-pre-wrap ${line.kind === "input" ? "text-os-accent" : "text-fg"}`}>
             {line.text || " "}
           </div>
         ))}
@@ -95,7 +95,7 @@ export default function TerminalApp() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={onKeyDown}
-          className="min-w-0 flex-1 bg-transparent text-fg caret-accent outline-none placeholder:text-fg-muted"
+          className="min-w-0 flex-1 bg-transparent text-fg caret-os-accent outline-none placeholder:text-fg-muted"
           autoFocus
           autoComplete="off"
           autoCapitalize="off"
