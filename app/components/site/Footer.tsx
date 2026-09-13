@@ -6,7 +6,7 @@ export default function Footer() {
 
   return (
     <footer className="mx-auto max-w-6xl px-5 pb-10 md:px-8">
-      <div className="grid border-t border-l border-rule-strong text-sm sm:grid-cols-4">
+      <div className="grid border-t border-l border-rule-strong text-sm sm:grid-cols-2 lg:grid-cols-4">
         <FooterCell label="Drawn by">{PROFILE.name}</FooterCell>
         <FooterCell label="Built with">Next.js · TypeScript · Tailwind</FooterCell>
         <FooterCell label="Source">
