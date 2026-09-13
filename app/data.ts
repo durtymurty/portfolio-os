@@ -16,13 +16,6 @@ export interface SkillGroup {
   items: string[];
 }
 
-export interface ProjectImage {
-  /** Path under /public, e.g. "/work/fsae-chassis/layup.jpg". */
-  src: string;
-  alt: string;
-  caption?: string;
-}
-
 export interface Project {
   slug: string;
   kind: "hardware" | "software";
@@ -36,9 +29,19 @@ export interface Project {
   org?: string;
   role?: string;
   period?: string;
-  /** Concrete contributions / outcomes. Only real facts — no filler. */
+  /** Short, factual bullets for the project card. */
   details?: string[];
-  images?: ProjectImage[];
+  /**
+   * Presence of this block creates a /work/[slug] case study page.
+   * Photos are picked up automatically from public/work/[slug]/ — see README.
+   */
+  caseStudy?: {
+    location: string;
+    /** Full contribution list (wording from the resume). */
+    contributions: string[];
+    /** Number of figure slots to show; unfilled slots render as "photo pending". */
+    photoSlots: number;
+  };
 }
 
 export interface Experience {
@@ -58,6 +61,7 @@ export interface Certification {
   name: string;
   issuer: string;
   emoji: string;
+  date?: string;
 }
 
 export const SITE_URL = "https://portfolio-os-one-chi.vercel.app";
@@ -89,7 +93,18 @@ export const SKILLS: SkillGroup[] = [
   { category: "Backend", items: ["Node.js", "Express.js", "REST APIs"] },
   { category: "Tools", items: ["Git", "GitHub", "AWS", "VS Code"] },
   { category: "AI/ML", items: ["Python", "Ollama", "Sentence Transformers", "LLM Evaluation", "Streamlit", "scikit-learn"] },
-  { category: "Engineering", items: ["CAD Modeling", "CNC Operation", "Carbon Fiber", "Robotics"] },
+  {
+    category: "Engineering",
+    items: [
+      "CAD Modeling & Technical Drawings",
+      "CNC Machine Operation",
+      "Composite Fabrication",
+      "Mechanical Fabrication & Assembly",
+      "Design for Manufacturing",
+      "Robotics Prototyping",
+      "Failure Analysis",
+    ],
+  },
 ];
 
 export const PROJECTS: Project[] = [
@@ -105,11 +120,20 @@ export const PROJECTS: Project[] = [
     role: "Aero & Chassis Team",
     period: "Sep 2025 – Present",
     details: [
-      "Assisted in manufacturing Formula SAE vehicle components, reducing fabrication time by 10–15%",
-      "Performed carbon layups and vacuum bagging with <2% rework rate",
-      "Assembled the carbon chassis tub with focus on quality and structural performance",
+      "Contributed to a 10–15% reduction in composite fabrication time through improved material handling",
+      "Carbon layups, vacuum bagging, material prep, and post-processing with <2% rework rate",
+      "Helped prep and assemble the carbon chassis tub",
     ],
-    images: [],
+    caseStudy: {
+      location: "San Luis Obispo, CA",
+      contributions: [
+        "Assisted Aero & Chassis subgroups in manufacturing components for the Formula SAE vehicle, contributing to a 10–15% reduction in composite fabrication time through improved material handling",
+        "Performed carbon layups, vacuum bagging, material preparation, and post-processing with <2% rework rate, ensuring quality and consistency in composite parts",
+        "Assisted in prepping and assembling the carbon chassis tub with a focus on quality, accuracy, and structural performance",
+        "Gained experience in composite fabrication workflows, safety procedures, and collaboration in a multidisciplinary engineering environment",
+      ],
+      photoSlots: 3,
+    },
   },
   {
     slug: "frc-robot-fabrication",
@@ -124,11 +148,21 @@ export const PROJECTS: Project[] = [
     role: "Fabrication Lead",
     period: "Aug 2023 – Jun 2024",
     details: [
-      "Led a team of 10 members in designing and fabricating custom robot parts",
-      "Created CAD models and operated CNC machinery",
-      "Managed workflow and quality assurance under competition deadlines",
+      "Guided a team of 10 through fabrication tasks built to strict specifications",
+      "Designed CAD models and translated them into machine-operable instructions",
+      "Operated CNC machinery to turn raw material into precise components",
     ],
-    images: [],
+    caseStudy: {
+      location: "Sammamish, WA",
+      contributions: [
+        "Guided a team of 10 members through detailed robotics fabrication tasks, ensuring all parts met strict specifications under competition deadlines",
+        "Designed and generated CAD models, translating design concepts into machine-operable instructions",
+        "Operated CNC machinery and oversaw the transformation of raw materials into precise components",
+        "Managed workflow and quality assurance processes while promoting strong communication throughout the team",
+        "Troubleshot fabrication challenges in real time, minimizing delays and maintaining productivity",
+      ],
+      photoSlots: 3,
+    },
   },
   {
     slug: "ai-code-reviewer",
@@ -183,9 +217,9 @@ export const EXPERIENCE: Experience[] = [
     company: "Cal Poly Racing",
     period: "Sep 2025 – Present",
     bullets: [
-      "Assisted in manufacturing Formula SAE vehicle components, reducing fabrication time by 10–15%",
-      "Performed carbon layups, vacuum bagging with <2% rework rate",
-      "Assembled carbon chassis tub with focus on quality and structural performance",
+      "Assisted Aero & Chassis subgroups in manufacturing Formula SAE components, contributing to a 10–15% reduction in composite fabrication time through improved material handling",
+      "Performed carbon layups, vacuum bagging, material preparation, and post-processing with <2% rework rate",
+      "Assisted in prepping and assembling the carbon chassis tub with a focus on quality, accuracy, and structural performance",
     ],
   },
   {
@@ -193,9 +227,9 @@ export const EXPERIENCE: Experience[] = [
     company: "FRC Team 2976, Spartabots",
     period: "Aug 2023 – Jun 2024",
     bullets: [
-      "Led a team of 10 members in designing and fabricating custom robot parts",
-      "Created CAD models and operated CNC machinery",
-      "Managed workflow and quality assurance under competition deadlines",
+      "Guided a team of 10 members through detailed robotics fabrication tasks, ensuring all parts met strict specifications under competition deadlines",
+      "Designed and generated CAD models, translating design concepts into machine-operable instructions",
+      "Operated CNC machinery and oversaw the transformation of raw materials into precise components",
     ],
   },
   {
@@ -203,17 +237,17 @@ export const EXPERIENCE: Experience[] = [
     company: "YMCA of Greater Seattle",
     period: "Jun 2023 – Sep 2025",
     bullets: [
-      "Taught water safety and technique to students across all skill levels",
-      "Developed structured adaptive lesson plans",
-      "Sustained 2+ years of consistent performance",
+      "Deliver tailored swim lessons to students across age groups and skill levels",
+      "Monitor class safety and intervene promptly in emergency situations",
+      "Assess individual progress and coordinate lesson plans with colleagues",
     ],
   },
 ];
 
 export const CERTIFICATIONS: Certification[] = [
-  { name: "AWS Cloud Practitioner", issuer: "Amazon Web Services", emoji: "☁️" },
-  { name: "Harvard AI Bootcamp", issuer: "Harvard University", emoji: "🎓" },
-  { name: "Networking Basics", issuer: "Cisco", emoji: "🌐" },
+  { name: "AWS Certified Cloud Practitioner", issuer: "Amazon Web Services", emoji: "☁️", date: "Aug 2025" },
+  { name: "Harvard AI Bootcamp", issuer: "Harvard University", emoji: "🎓", date: "Dec 2023" },
+  { name: "Networking Basics", issuer: "Cisco", emoji: "🌐", date: "Mar 2025" },
   { name: "Building with the Claude API", issuer: "Anthropic", emoji: "🤖" },
   { name: "AI Fundamentals", issuer: "Various", emoji: "🧠" },
 ];

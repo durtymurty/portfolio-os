@@ -41,7 +41,10 @@ export default function SkillsSection() {
             {CERTIFICATIONS.map((cert) => (
               <li key={cert.name} className="border-b border-rule py-3">
                 <p className="font-medium">{cert.name}</p>
-                <p className="text-sm text-ink-muted">{cert.issuer}</p>
+                <p className="text-sm text-ink-muted">
+                  {cert.issuer}
+                  {cert.date && <span className="font-mono text-xs"> · {cert.date}</span>}
+                </p>
               </li>
             ))}
           </ul>
