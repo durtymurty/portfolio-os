@@ -16,15 +16,29 @@ export interface SkillGroup {
   items: string[];
 }
 
+export interface ProjectImage {
+  /** Path under /public, e.g. "/work/fsae-chassis/layup.jpg". */
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
 export interface Project {
   slug: string;
+  kind: "hardware" | "software";
   name: string;
   description: string;
   tech: string[];
-  github: string;
+  github?: string;
   emoji: string;
   color: string;
   highlight?: string;
+  org?: string;
+  role?: string;
+  period?: string;
+  /** Concrete contributions / outcomes. Only real facts — no filler. */
+  details?: string[];
+  images?: ProjectImage[];
 }
 
 export interface Experience {
@@ -45,6 +59,8 @@ export interface Certification {
   issuer: string;
   emoji: string;
 }
+
+export const SITE_URL = "https://portfolio-os-one-chi.vercel.app";
 
 export const PROFILE: Profile = {
   name: "Murtaza Bootwala",
@@ -78,7 +94,45 @@ export const SKILLS: SkillGroup[] = [
 
 export const PROJECTS: Project[] = [
   {
+    slug: "fsae-carbon-chassis",
+    kind: "hardware",
+    name: "Formula SAE Carbon Chassis",
+    description: "Manufacturing Formula SAE vehicle components on Cal Poly Racing's aero and chassis team — carbon layups, vacuum bagging, and assembly of the carbon chassis tub.",
+    tech: ["Carbon Fiber", "Composite Layup", "Vacuum Bagging"],
+    emoji: "🏎️",
+    color: "#f97316",
+    org: "Cal Poly Racing",
+    role: "Aero & Chassis Team",
+    period: "Sep 2025 – Present",
+    details: [
+      "Assisted in manufacturing Formula SAE vehicle components, reducing fabrication time by 10–15%",
+      "Performed carbon layups and vacuum bagging with <2% rework rate",
+      "Assembled the carbon chassis tub with focus on quality and structural performance",
+    ],
+    images: [],
+  },
+  {
+    slug: "frc-robot-fabrication",
+    kind: "hardware",
+    name: "FRC Robot Fabrication",
+    description: "Led the fabrication team for FRC Team 2976 Spartabots, taking custom competition robot parts from CAD models to CNC-machined components.",
+    tech: ["CAD Modeling", "CNC Operation", "Robotics"],
+    emoji: "🤖",
+    color: "#3fb950",
+    highlight: "Fabrication Lead — team of 10",
+    org: "FRC Team 2976, Spartabots",
+    role: "Fabrication Lead",
+    period: "Aug 2023 – Jun 2024",
+    details: [
+      "Led a team of 10 members in designing and fabricating custom robot parts",
+      "Created CAD models and operated CNC machinery",
+      "Managed workflow and quality assurance under competition deadlines",
+    ],
+    images: [],
+  },
+  {
     slug: "ai-code-reviewer",
+    kind: "software",
     name: "AI Code Reviewer",
     description: "AI-powered code review tool built with Next.js and Claude Sonnet. Detects bugs, security vulnerabilities, and performance issues with severity ratings.",
     tech: ["Next.js", "TypeScript", "Claude API", "Tailwind CSS"],
@@ -88,6 +142,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "foodspect",
+    kind: "software",
     name: "FoodSpect App",
     description: "Mobile app built with Flutter that helps people with food allergies make safe dietary choices. Features a UPC barcode scanner and allergy profile matching.",
     tech: ["Flutter", "Dart", "Open Food Facts API"],
@@ -98,6 +153,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "llm-eval",
+    kind: "software",
     name: "LLM Evaluation Framework",
     description: "Local framework for evaluating and comparing LLMs using semantic similarity scoring, LLM-as-judge, and hallucination detection. Supports multi-model comparison with a live Streamlit dashboard.",
     tech: ["Python", "Ollama", "Sentence Transformers", "Streamlit", "scikit-learn"],
@@ -107,6 +163,7 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "portfolio-os",
+    kind: "software",
     name: "Dev Portfolio OS",
     description: "This portfolio! A desktop-OS experience with a custom window manager, taskbar, and a dozen apps.",
     tech: ["Next.js", "TypeScript", "Tailwind CSS"],

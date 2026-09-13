@@ -27,9 +27,11 @@ export default function ProjectsApp() {
                 <li key={t}><Tag color={project.color}>{t}</Tag></li>
               ))}
             </ul>
-            <ExternalLink href={project.github} className={buttonClass}>
-              <Icon>🐙</Icon> View {project.name} on GitHub
-            </ExternalLink>
+            {project.github && (
+              <ExternalLink href={project.github} className={buttonClass}>
+                <Icon>🐙</Icon> View {project.name} on GitHub
+              </ExternalLink>
+            )}
           </li>
         ))}
       </ul>

@@ -4,7 +4,7 @@ import { ExternalLink, Icon } from "../ui";
 const LINKS = [
   { label: "GitHub Profile", url: PROFILE.links.github, emoji: "🐙", desc: "Repositories and contributions" },
   { label: "LinkedIn", url: PROFILE.links.linkedin, emoji: "💼", desc: "Connect with me professionally" },
-  ...PROJECTS.map((p) => ({ label: p.name, url: p.github, emoji: p.emoji, desc: p.tech.join(" · ") })),
+  ...PROJECTS.flatMap((p) => (p.github ? [{ label: p.name, url: p.github, emoji: p.emoji, desc: p.tech.join(" · ") }] : [])),
   { label: "Cal Poly SLO", url: "https://www.calpoly.edu", emoji: "🎓", desc: "California Polytechnic State University" },
 ];
 
