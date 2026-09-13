@@ -1,82 +1,99 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useReducer, useRef } from "react";
+import { calcReducer, initialCalc, type CalcAction, type Op } from "../../lib/calculator";
+
+type Key = { label: string; aria?: string; action: CalcAction; tone: "fn" | "op" | "num"; wide?: boolean };
+
+const num = (d: string): Key => ({ label: d, action: { type: "digit", digit: d }, tone: "num" });
+const op = (o: Op, aria: string): Key => ({ label: o, aria, action: { type: "op", op: o }, tone: "op" });
+
+const KEYS: Key[] = [
+  { label: "AC", aria: "All clear", action: { type: "clear" }, tone: "fn" },
+  { label: "+/−", aria: "Toggle sign", action: { type: "negate" }, tone: "fn" },
+  { label: "%", aria: "Percent", action: { type: "percent" }, tone: "fn" },
+  op("÷", "Divide"),
+  num("7"), num("8"), num("9"), op("×", "Multiply"),
+  num("4"), num("5"), num("6"), op("-", "Minus"),
+  num("1"), num("2"), num("3"), op("+", "Plus"),
+  { ...num("0"), wide: true },
+  { label: ".", aria: "Decimal point", action: { type: "dot" }, tone: "num" },
+  { label: "=", aria: "Equals", action: { type: "equals" }, tone: "op" },
+];
+
+const KEYBOARD: Record<string, CalcAction> = {
+  "+": { type: "op", op: "+" },
+  "-": { type: "op", op: "-" },
+  "*": { type: "op", op: "×" },
+  "x": { type: "op", op: "×" },
+  "/": { type: "op", op: "÷" },
+  "Enter": { type: "equals" },
+  "=": { type: "equals" },
+  ".": { type: "dot" },
+  ",": { type: "dot" },
+  "%": { type: "percent" },
+  "Backspace": { type: "backspace" },
+  "Delete": { type: "clear" },
+  "c": { type: "clear" },
+};
+
+const TONES = {
+  fn: "bg-[#a5a5a5] text-black",
+  op: "bg-[#ff9f0a] text-white",
+  num: "bg-[#333] text-white",
+};
 
 export default function CalculatorApp() {
-  const [display, setDisplay] = useState("0");
-  const [prev, setPrev] = useState("");
-  const [op, setOp] = useState("");
-  const [reset, setReset] = useState(false);
+  const [state, dispatch] = useReducer(calcReducer, initialCalc);
+  const rootRef = useRef<HTMLDivElement>(null);
 
-  const handleNum = (n: string) => {
-    if (reset) { setDisplay(n); setReset(false); return; }
-    setDisplay(display === "0" ? n : display + n);
+  useEffect(() => rootRef.current?.focus({ preventScroll: true }), []);
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    const action = /^\d$/.test(e.key) ? ({ type: "digit", digit: e.key } as const) : KEYBOARD[e.key];
+    if (!action) return;
+    // Let Enter/Space activate a focused button normally instead of double-firing.
+    if ((e.key === "Enter") && (e.target as HTMLElement).tagName === "BUTTON") return;
+    e.preventDefault();
+    dispatch(action);
   };
 
-  const handleOp = (o: string) => {
-    setPrev(display);
-    setOp(o);
-    setReset(true);
-  };
-
-  const handleEqual = () => {
-    const a = parseFloat(prev);
-    const b = parseFloat(display);
-    let result = 0;
-    if (op === "+") result = a + b;
-    if (op === "-") result = a - b;
-    if (op === "×") result = a * b;
-    if (op === "÷") result = b !== 0 ? a / b : 0;
-    setDisplay(String(parseFloat(result.toFixed(10))));
-    setOp("");
-    setPrev("");
-    setReset(true);
-  };
-
-  const handleClear = () => { setDisplay("0"); setPrev(""); setOp(""); setReset(false); };
-  const handleDot = () => { if (!display.includes(".")) setDisplay(display + "."); };
-  const handleToggle = () => setDisplay(String(parseFloat(display) * -1));
-  const handlePercent = () => setDisplay(String(parseFloat(display) / 100));
-
-  const btn = (label: string, onClick: () => void, color = "#333", textColor = "white", wide = false) => (
-    <button
-      onClick={onClick}
-      style={{ background: color, color: textColor, border: "none", borderRadius: "50%", width: wide ? "130px" : "60px", height: "60px", fontSize: "20px", fontWeight: "500", cursor: "pointer", transition: "opacity 0.1s" }}
-      onMouseDown={e => (e.currentTarget.style.opacity = "0.7")}
-      onMouseUp={e => (e.currentTarget.style.opacity = "1")}
-    >
-      {label}
-    </button>
-  );
+  const fontSize = state.display.length > 9 ? "text-3xl" : "text-5xl";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", padding: "8px" }}>
-      <div style={{ width: "100%", textAlign: "right", padding: "8px 4px", fontSize: "48px", fontWeight: "200", color: "white", wordBreak: "break-all", lineHeight: 1.1 }}>
-        {display}
-      </div>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 60px)", gap: "10px" }}>
-        {btn("AC", handleClear, "#a5a5a5", "#000")}
-        {btn("+/-", handleToggle, "#a5a5a5", "#000")}
-        {btn("%", handlePercent, "#a5a5a5", "#000")}
-        {btn("÷", () => handleOp("÷"), "#ff9f0a")}
-        {btn("7", () => handleNum("7"), "#333")}
-        {btn("8", () => handleNum("8"), "#333")}
-        {btn("9", () => handleNum("9"), "#333")}
-        {btn("×", () => handleOp("×"), "#ff9f0a")}
-        {btn("4", () => handleNum("4"), "#333")}
-        {btn("5", () => handleNum("5"), "#333")}
-        {btn("6", () => handleNum("6"), "#333")}
-        {btn("-", () => handleOp("-"), "#ff9f0a")}
-        {btn("1", () => handleNum("1"), "#333")}
-        {btn("2", () => handleNum("2"), "#333")}
-        {btn("3", () => handleNum("3"), "#333")}
-        {btn("+", () => handleOp("+"), "#ff9f0a")}
-        <button
-          onClick={() => handleNum("0")}
-          style={{ background: "#333", color: "white", border: "none", borderRadius: "30px", width: "130px", height: "60px", fontSize: "20px", fontWeight: "500", cursor: "pointer", gridColumn: "span 2", textAlign: "left", paddingLeft: "22px" }}
-        >0</button>
-        {btn(".", handleDot, "#333")}
-        {btn("=", handleEqual, "#ff9f0a")}
+    <div
+      ref={rootRef}
+      tabIndex={-1}
+      onKeyDown={onKeyDown}
+      aria-label="Calculator. Supports keyboard input."
+      role="group"
+      className="mx-auto flex max-w-[290px] flex-col items-stretch gap-3 p-2 outline-none"
+    >
+      <p aria-hidden="true" className="h-5 text-right text-sm text-fg-muted">
+        {state.acc !== null && state.op ? `${state.acc} ${state.op}` : ""}
+      </p>
+      <output aria-live="polite" aria-atomic="true" className={`block px-1 text-right leading-tight font-extralight break-all text-white ${fontSize}`}>
+        {state.display}
+      </output>
+      <div className="grid grid-cols-4 gap-2.5">
+        {KEYS.map((key) => {
+          const pending = key.action.type === "op" && state.op === key.action.op && state.overwrite;
+          return (
+            <button
+              key={key.label}
+              type="button"
+              aria-label={key.aria}
+              aria-pressed={key.action.type === "op" ? pending : undefined}
+              onClick={() => dispatch(key.action)}
+              className={`h-15 rounded-full text-xl font-medium transition-[filter] hover:brightness-110 active:brightness-75 ${
+                key.wide ? "col-span-2 pl-6 text-left" : ""
+              } ${pending ? "bg-white text-[#ff9f0a]" : TONES[key.tone]}`}
+            >
+              {key.label}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

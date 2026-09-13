@@ -25,9 +25,34 @@ An interactive portfolio built as a fully functional desktop OS experience. Feat
 
 - **Framework** — Next.js 16 with App Router
 - **Language** — TypeScript
-- **Styling** — Tailwind CSS + custom animations
-- **Weather API** — Open-Meteo (free, no API key needed)
-- **Deployment** — Vercel
+- **Styling** — Tailwind CSS v4 (design tokens in `app/globals.css`)
+- **Weather API** — Open-Meteo (free, no API key needed), CDN-cached for 10 min
+- **Testing** — Vitest unit tests for the window manager, calculator, snake, and weather logic
+- **Deployment** — Vercel + Vercel Web Analytics
+
+## Project Structure
+
+```
+app/
+  data.ts            ← all portfolio content (single source of truth)
+  components/
+    Desktop.tsx      ← window manager shell
+    Window.tsx       ← draggable / resizable / keyboard-accessible window
+    Taskbar.tsx, Clock.tsx, ui.tsx
+    apps/            ← one file per app + registry.tsx
+  lib/               ← pure, unit-tested logic (windowManager, calculator, snake, weather, terminal)
+  api/weather/       ← Open-Meteo proxy
+```
+
+## Development
+
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm test           # unit tests
+npm run lint       # ESLint (next/core-web-vitals + TypeScript)
+npm run typecheck
+```
 
 ## Live Demo
 

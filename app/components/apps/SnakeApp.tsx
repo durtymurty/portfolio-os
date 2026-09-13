@@ -1,142 +1,202 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { GRID, isReversal, newGame, step, tickMs, type Dir, type SnakeState } from "../../lib/snake";
 
-const GRID = 20;
-const CELL = 20;
-const SPEED = 150;
+const BOARD_PX = 400;
+const CELL = BOARD_PX / GRID;
+const BEST_KEY = "portfolio-os:snake-best";
 
-type Dir = "UP" | "DOWN" | "LEFT" | "RIGHT";
-type Point = { x: number; y: number };
+type Status = "idle" | "running" | "paused" | "over";
+
+const KEY_DIRS: Record<string, Dir> = {
+  ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right",
+  w: "up", s: "down", a: "left", d: "right",
+};
+
+function readBest(): number {
+  try {
+    return Number(localStorage.getItem(BEST_KEY)) || 0;
+  } catch {
+    return 0;
+  }
+}
 
 export default function SnakeApp() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const game = useRef<SnakeState>(newGame());
+  const queue = useRef<Dir[]>([]);
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
+  const [status, setStatus] = useState<Status>("idle");
   const [score, setScore] = useState(0);
-  const [best, setBest] = useState(0);
-  const [running, setRunning] = useState(false);
-  const [dead, setDead] = useState(false);
-  const snake = useRef<Point[]>([{ x: 10, y: 10 }]);
-  const food = useRef<Point>({ x: 5, y: 5 });
-  const dir = useRef<Dir>("RIGHT");
-  const nextDir = useRef<Dir>("RIGHT");
-  const interval = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
-
-  const randomFood = (): Point => ({
-    x: Math.floor(Math.random() * GRID),
-    y: Math.floor(Math.random() * GRID),
-  });
+  const [best, setBest] = useState(readBest);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d")!;
-    ctx.fillStyle = "#0d1117";
-    ctx.fillRect(0, 0, GRID * CELL, GRID * CELL);
+    const ctx = canvas?.getContext("2d");
+    if (!canvas || !ctx) return;
+    const dpr = window.devicePixelRatio || 1;
+    if (canvas.width !== BOARD_PX * dpr) {
+      canvas.width = canvas.height = BOARD_PX * dpr;
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    // Food
+    ctx.fillStyle = "#0d1117";
+    ctx.fillRect(0, 0, BOARD_PX, BOARD_PX);
+
+    const { food, snake } = game.current;
     ctx.fillStyle = "#f85149";
     ctx.beginPath();
-    ctx.arc(food.current.x * CELL + CELL / 2, food.current.y * CELL + CELL / 2, CELL / 2 - 2, 0, Math.PI * 2);
+    ctx.arc(food.x * CELL + CELL / 2, food.y * CELL + CELL / 2, CELL / 2 - 2, 0, Math.PI * 2);
     ctx.fill();
 
-    // Snake
-    snake.current.forEach((seg, i) => {
+    snake.forEach((seg, i) => {
       ctx.fillStyle = i === 0 ? "#3fb950" : "#238636";
       ctx.fillRect(seg.x * CELL + 1, seg.y * CELL + 1, CELL - 2, CELL - 2);
     });
   }, []);
 
-  const tick = useCallback(() => {
-    dir.current = nextDir.current;
-    const head = snake.current[0];
-    const newHead = {
-      x: (head.x + (dir.current === "RIGHT" ? 1 : dir.current === "LEFT" ? -1 : 0) + GRID) % GRID,
-      y: (head.y + (dir.current === "DOWN" ? 1 : dir.current === "UP" ? -1 : 0) + GRID) % GRID,
+  useEffect(draw, [draw]);
+
+  // Game loop — a timeout chain so speed can change as the score climbs.
+  useEffect(() => {
+    if (status !== "running") return;
+    let timer: ReturnType<typeof setTimeout>;
+    const tick = () => {
+      const dir = queue.current.shift() ?? game.current.dir;
+      const prev = game.current;
+      game.current = step(prev, dir);
+      draw();
+      if (game.current.score !== prev.score) setScore(game.current.score);
+      if (game.current.dead) {
+        setStatus("over");
+        setBest((b) => {
+          const next = Math.max(b, game.current.score);
+          try { localStorage.setItem(BEST_KEY, String(next)); } catch { /* storage unavailable */ }
+          return next;
+        });
+        return;
+      }
+      timer = setTimeout(tick, tickMs(game.current.score));
     };
+    timer = setTimeout(tick, tickMs(game.current.score));
+    return () => clearTimeout(timer);
+  }, [status, draw]);
 
-    if (snake.current.some(s => s.x === newHead.x && s.y === newHead.y)) {
-      clearInterval(interval.current);
-      setRunning(false);
-      setDead(true);
-      setScore(s => { setBest(b => Math.max(b, s)); return s; });
-      return;
-    }
-
-    snake.current = [newHead, ...snake.current];
-    if (newHead.x === food.current.x && newHead.y === food.current.y) {
-      food.current = randomFood();
-      setScore(s => s + 1);
-    } else {
-      snake.current.pop();
-    }
-    draw();
-  }, [draw]);
+  // Pause when the tab is hidden.
+  useEffect(() => {
+    const onVisibility = () => document.hidden && setStatus((s) => (s === "running" ? "paused" : s));
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
 
   const start = () => {
-    snake.current = [{ x: 10, y: 10 }];
-    food.current = randomFood();
-    dir.current = "RIGHT";
-    nextDir.current = "RIGHT";
+    game.current = newGame();
+    queue.current = [];
     setScore(0);
-    setDead(false);
-    setRunning(true);
-    clearInterval(interval.current);
-    interval.current = setInterval(tick, SPEED);
+    setStatus("running");
     draw();
+    rootRef.current?.focus({ preventScroll: true });
   };
 
-  useEffect(() => {
-    draw();
-    return () => clearInterval(interval.current);
-  }, [draw]);
+  const resume = () => {
+    setStatus("running");
+    rootRef.current?.focus({ preventScroll: true });
+  };
 
-  useEffect(() => {
-    if (running) {
-      clearInterval(interval.current);
-      interval.current = setInterval(tick, SPEED);
+  const turn = (dir: Dir) => {
+    const last = queue.current.at(-1) ?? game.current.dir;
+    // Queue up to two turns so quick "up, left" presses both register without reversing into yourself.
+    if (dir !== last && !isReversal(last, dir) && queue.current.length < 2) queue.current.push(dir);
+  };
+
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const dir = KEY_DIRS[e.key];
+    if (e.key === " ") {
+      e.preventDefault();
+      if (status === "running") setStatus("paused");
+      else if (status === "paused") resume();
+      else start();
+      return;
     }
-  }, [tick, running]);
+    if (!dir) return;
+    e.preventDefault();
+    if (status === "running") turn(dir);
+  };
 
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (!running) return;
-      if (["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)) {
-        e.preventDefault();
-      }
-      if (e.key === "ArrowUp" && dir.current !== "DOWN") nextDir.current = "UP";
-      if (e.key === "ArrowDown" && dir.current !== "UP") nextDir.current = "DOWN";
-      if (e.key === "ArrowLeft" && dir.current !== "RIGHT") nextDir.current = "LEFT";
-      if (e.key === "ArrowRight" && dir.current !== "LEFT") nextDir.current = "RIGHT";
-    };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [running]);
+  const onSwipeEnd = (e: React.PointerEvent) => {
+    const s = swipeStart.current;
+    swipeStart.current = null;
+    if (!s || status !== "running") return;
+    const dx = e.clientX - s.x;
+    const dy = e.clientY - s.y;
+    if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+    turn(Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : dy > 0 ? "down" : "up");
+  };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "16px" }}>
-      <div style={{ display: "flex", gap: "24px" }}>
-        <div style={{ textAlign: "center" }}>
-          <p style={{ fontSize: "11px", color: "#8b949e", textTransform: "uppercase" }}>Score</p>
-          <p style={{ fontSize: "28px", fontWeight: "700", color: "#3fb950" }}>{score}</p>
+    <div
+      ref={rootRef}
+      tabIndex={-1}
+      onKeyDown={onKeyDown}
+      // Leaving the game (clicking another window, minimizing) pauses it.
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) setStatus((s) => (s === "running" ? "paused" : s));
+      }}
+      className="flex flex-col items-center gap-4 outline-none"
+    >
+      <div className="flex gap-6" aria-live="polite">
+        <div className="text-center">
+          <p className="text-[11px] text-fg-muted uppercase">Score</p>
+          <p className="text-3xl font-bold text-ok">{score}</p>
         </div>
-        <div style={{ textAlign: "center" }}>
-          <p style={{ fontSize: "11px", color: "#8b949e", textTransform: "uppercase" }}>Best</p>
-          <p style={{ fontSize: "28px", fontWeight: "700", color: "#58a6ff" }}>{best}</p>
+        <div className="text-center">
+          <p className="text-[11px] text-fg-muted uppercase">Best</p>
+          <p className="text-3xl font-bold text-accent">{best}</p>
         </div>
       </div>
 
-      <div style={{ position: "relative" }}>
-        <canvas ref={canvasRef} width={GRID * CELL} height={GRID * CELL} style={{ border: "1px solid rgba(255,255,255,0.1)", borderRadius: "8px", display: "block" }} />
-        {!running && (
-          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.7)", borderRadius: "8px", gap: "12px" }}>
-            {dead && <p style={{ color: "#f85149", fontSize: "18px", fontWeight: "700" }}>Game Over!</p>}
-            <button onClick={start} style={{ background: "#3fb950", color: "#000", border: "none", borderRadius: "8px", padding: "10px 24px", fontSize: "14px", fontWeight: "600", cursor: "pointer" }}>
-              {dead ? "Play Again" : "Start Game"}
+      <div className="relative w-full max-w-[400px]">
+        <canvas
+          ref={canvasRef}
+          role="img"
+          aria-label={`Snake board. Score ${score}.`}
+          className="block aspect-square w-full touch-none rounded-lg border border-white/10"
+          onPointerDown={(e) => (swipeStart.current = { x: e.clientX, y: e.clientY })}
+          onPointerUp={onSwipeEnd}
+        />
+        {status !== "running" && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-lg bg-black/70">
+            {status === "over" && <p className="text-lg font-bold text-danger">Game Over!</p>}
+            {status === "paused" && <p className="text-lg font-bold text-fg-strong">Paused</p>}
+            <button
+              type="button"
+              onClick={status === "paused" ? resume : start}
+              className="rounded-lg bg-ok px-6 py-2.5 text-sm font-semibold text-black hover:brightness-110"
+            >
+              {status === "paused" ? "Resume" : status === "over" ? "Play Again" : "Start Game"}
             </button>
           </div>
         )}
       </div>
-      <p style={{ fontSize: "12px", color: "#8b949e" }}>Use arrow keys to control the snake</p>
+
+      {/* On-screen controls for touch devices. */}
+      <div className="hidden grid-cols-3 gap-1.5 [@media(pointer:coarse)]:grid" aria-label="Direction controls">
+        {([["up", "↑", "col-start-2"], ["left", "←", "col-start-1"], ["down", "↓", ""], ["right", "→", ""]] as const).map(([dir, label, pos]) => (
+          <button
+            key={dir}
+            type="button"
+            aria-label={`Move ${dir}`}
+            onPointerDown={(e) => { e.preventDefault(); turn(dir); }}
+            className={`size-12 rounded-lg border border-line bg-raised text-xl text-fg-strong ${pos}`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
+      <p className="text-xs text-fg-muted">Arrow keys / WASD to steer · Space to pause</p>
     </div>
   );
 }

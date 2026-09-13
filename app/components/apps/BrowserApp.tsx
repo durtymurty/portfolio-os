@@ -1,44 +1,39 @@
-"use client";
+import { PROFILE, PROJECTS } from "../../data";
+import { ExternalLink, Icon } from "../ui";
+
+const LINKS = [
+  { label: "GitHub Profile", url: PROFILE.links.github, emoji: "🐙", desc: "Repositories and contributions" },
+  { label: "LinkedIn", url: PROFILE.links.linkedin, emoji: "💼", desc: "Connect with me professionally" },
+  ...PROJECTS.map((p) => ({ label: p.name, url: p.github, emoji: p.emoji, desc: p.tech.join(" · ") })),
+  { label: "Cal Poly SLO", url: "https://www.calpoly.edu", emoji: "🎓", desc: "California Polytechnic State University" },
+];
 
 export default function BrowserApp() {
-  const links = [
-    { label: "GitHub Profile", url: "https://github.com/durtymurty", emoji: "🐙", desc: "View my repositories and contributions", color: "#f0f6fc" },
-    { label: "AI Code Reviewer", url: "https://github.com/durtymurty/ai-code-reviewer", emoji: "🔍", desc: "AI-powered code review tool built with Next.js and Claude", color: "#58a6ff" },
-    { label: "LinkedIn", url: "https://www.linkedin.com/in/murtazabootwala25", emoji: "💼", desc: "Connect with me professionally", color: "#0077b5" },
-    { label: "Cal Poly SLO", url: "https://www.calpoly.edu", emoji: "🎓", desc: "California Polytechnic State University", color: "#154734" },
-  ];
-
   return (
-    <div style={{ color: "#c9d1d9", display: "flex", flexDirection: "column", gap: "20px", height: "100%" }}>
-
-      {/* Header */}
-      <div style={{ textAlign: "center", padding: "10px 0" }}>
-        <div style={{ fontSize: "40px", marginBottom: "8px" }}>🌐</div>
-        <h1 style={{ fontSize: "18px", fontWeight: "700", color: "#f0f6fc" }}>Quick Links</h1>
-        <p style={{ fontSize: "12px", color: "#8b949e", marginTop: "4px" }}>Click to open in a new tab</p>
+    <div className="flex flex-col gap-5">
+      <div className="py-2.5 text-center">
+        <Icon className="mb-2 block text-4xl">🌐</Icon>
+        <h2 className="text-lg font-bold text-fg-strong">Quick Links</h2>
+        <p className="mt-1 text-xs text-fg-muted">Each link opens in a new tab</p>
       </div>
 
-      {/* Links */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        {links.map(link => (
-          <div
-            key={link.label}
-            onClick={() => window.open(link.url, "_blank")}
-            style={{ display: "flex", alignItems: "center", gap: "16px", padding: "16px 18px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px", cursor: "pointer", transition: "all 0.2s" }}
-            onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.07)"; (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.15)"; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.background = "rgba(255,255,255,0.03)"; (e.currentTarget as HTMLDivElement).style.borderColor = "rgba(255,255,255,0.08)"; }}
-          >
-            <div style={{ width: "48px", height: "48px", borderRadius: "12px", background: "rgba(255,255,255,0.06)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px", flexShrink: 0 }}>
-              {link.emoji}
-            </div>
-            <div style={{ flex: 1 }}>
-              <p style={{ fontSize: "14px", fontWeight: "600", color: "#f0f6fc", marginBottom: "3px" }}>{link.label}</p>
-              <p style={{ fontSize: "12px", color: "#8b949e" }}>{link.desc}</p>
-            </div>
-            <div style={{ color: "#8b949e", fontSize: "16px", flexShrink: 0 }}>↗</div>
-          </div>
+      <ul className="flex flex-col gap-2.5">
+        {LINKS.map((link) => (
+          <li key={link.url}>
+            <ExternalLink
+              href={link.url}
+              className="flex items-center gap-4 rounded-xl border border-line bg-raised px-4 py-3.5 transition-colors hover:border-white/15 hover:bg-white/[0.07]"
+            >
+              <Icon className="grid size-11 shrink-0 place-items-center rounded-xl bg-white/[0.06] text-2xl">{link.emoji}</Icon>
+              <span className="min-w-0 flex-1">
+                <span className="mb-0.5 block text-sm font-semibold text-fg-strong">{link.label}</span>
+                <span className="block truncate text-xs text-fg-muted">{link.desc}</span>
+              </span>
+              <Icon className="shrink-0 text-fg-muted">↗</Icon>
+            </ExternalLink>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 }

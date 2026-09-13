@@ -1,64 +1,81 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { describeWeather, isWeatherData, WEATHER_LOCATION, type WeatherData } from "../../lib/weather";
+import { Icon } from "../ui";
 
-interface WeatherData {
-  temp: number;
-  feels_like: number;
-  humidity: number;
-  description: string;
-  wind: number;
-  high: number;
-  low: number;
-}
+type Load = { status: "loading" } | { status: "error" } | { status: "ok"; data: WeatherData };
 
 export default function WeatherApp() {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [load, setLoad] = useState<Load>({ status: "loading" });
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    fetch("/api/weather")
-      .then(r => r.json())
-      .then(data => { setWeather(data); setLoading(false); })
-      .catch(() => { setError("Could not load weather"); setLoading(false); });
-  }, []);
+    const controller = new AbortController();
+    fetch("/api/weather", { signal: controller.signal })
+      .then(async (res) => {
+        const body: unknown = await res.json();
+        if (!res.ok || !isWeatherData(body)) throw new Error("Bad weather response");
+        setLoad({ status: "ok", data: body });
+      })
+      .catch((err) => {
+        if (!controller.signal.aborted) {
+          console.warn("Weather failed to load", err);
+          setLoad({ status: "error" });
+        }
+      });
+    return () => controller.abort();
+  }, [attempt]);
 
-  const getEmoji = (desc: string) => {
-    if (desc.includes("clear")) return "☀️";
-    if (desc.includes("cloud")) return "☁️";
-    if (desc.includes("rain")) return "🌧️";
-    if (desc.includes("snow")) return "❄️";
-    if (desc.includes("thunder")) return "⛈️";
-    if (desc.includes("fog") || desc.includes("mist")) return "🌫️";
-    return "🌤️";
-  };
+  if (load.status === "loading") {
+    return <p role="status" className="p-10 text-center text-fg-muted">Loading weather…</p>;
+  }
 
-  if (loading) return <div style={{ color: "#8b949e", textAlign: "center", padding: "40px" }}>Loading weather...</div>;
-  if (error || !weather) return <div style={{ color: "#f85149", textAlign: "center", padding: "40px" }}>{error || "No data"}</div>;
+  if (load.status === "error") {
+    return (
+      <div role="alert" className="flex flex-col items-center gap-3 p-10 text-center">
+        <p className="text-danger">Couldn&apos;t load the weather.</p>
+        <button
+          type="button"
+          onClick={() => { setLoad({ status: "loading" }); setAttempt((a) => a + 1); }}
+          className="rounded-md border border-line bg-raised px-3 py-1.5 text-sm text-fg-strong hover:bg-white/10"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
+  const w = load.data;
+  const { label, emoji } = describeWeather(w.code, w.isDay);
+  const stats = [
+    { label: "Feels like", value: `${Math.round(w.feelsLike)}°F`, icon: "🌡️" },
+    { label: "Humidity", value: `${Math.round(w.humidity)}%`, icon: "💧" },
+    { label: "Wind", value: `${Math.round(w.wind)} mph`, icon: "💨" },
+    { label: "High / Low", value: `${Math.round(w.high)}° / ${Math.round(w.low)}°`, icon: "📊" },
+  ];
 
   return (
-    <div style={{ color: "#c9d1d9", display: "flex", flexDirection: "column", gap: "20px" }}>
-      <div style={{ textAlign: "center", padding: "20px 0" }}>
-        <p style={{ fontSize: "13px", color: "#8b949e", marginBottom: "8px" }}>📍 San Luis Obispo, CA</p>
-        <div style={{ fontSize: "72px", marginBottom: "8px" }}>{getEmoji(weather.description)}</div>
-        <div style={{ fontSize: "64px", fontWeight: "200", color: "#f0f6fc" }}>{Math.round(weather.temp)}°</div>
-        <p style={{ fontSize: "16px", color: "#8b949e", textTransform: "capitalize", marginTop: "4px" }}>{weather.description}</p>
+    <div className="flex flex-col gap-5">
+      <div className="py-4 text-center">
+        <p className="mb-2 text-[13px] text-fg-muted"><Icon>📍</Icon> {WEATHER_LOCATION.label}</p>
+        <Icon className="mb-2 block text-7xl">{emoji}</Icon>
+        <p className="text-6xl font-extralight text-fg-strong">
+          {Math.round(w.temp)}°<span className="sr-only">F</span>
+        </p>
+        <p className="mt-1 text-base text-fg-muted">{label}</p>
       </div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}>
-        {[
-          { label: "Feels Like", value: `${Math.round(weather.feels_like)}°F`, icon: "🌡️" },
-          { label: "Humidity", value: `${weather.humidity}%`, icon: "💧" },
-          { label: "Wind", value: `${weather.wind} mph`, icon: "💨" },
-          { label: "H/L", value: `${Math.round(weather.high)}° / ${Math.round(weather.low)}°`, icon: "📊" },
-        ].map(item => (
-          <div key={item.label} style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "12px", padding: "14px", textAlign: "center" }}>
-            <div style={{ fontSize: "20px", marginBottom: "4px" }}>{item.icon}</div>
-            <div style={{ fontSize: "18px", fontWeight: "600", color: "#f0f6fc" }}>{item.value}</div>
-            <div style={{ fontSize: "11px", color: "#8b949e", marginTop: "2px" }}>{item.label}</div>
+      <dl className="grid grid-cols-2 gap-2.5">
+        {stats.map((s) => (
+          <div key={s.label} className="flex flex-col-reverse rounded-xl border border-line bg-raised p-3.5 text-center">
+            <dt className="mt-0.5 text-[11px] text-fg-muted">{s.label}</dt>
+            <dd className="text-lg font-semibold text-fg-strong">
+              <Icon className="mb-1 block text-xl">{s.icon}</Icon>
+              {s.value}
+            </dd>
           </div>
         ))}
-      </div>
+      </dl>
     </div>
   );
 }

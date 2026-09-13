@@ -1,16 +1,73 @@
-export const PROFILE = {
+// Single source of truth for all portfolio content.
+// Every app (and the terminal) renders from these exports — never hardcode
+// contact details or project facts elsewhere.
+
+export interface Profile {
+  name: string;
+  title: string;
+  bio: string;
+  email: string;
+  location: string;
+  links: { linkedin: string; github: string };
+}
+
+export interface SkillGroup {
+  category: string;
+  items: string[];
+}
+
+export interface Project {
+  slug: string;
+  name: string;
+  description: string;
+  tech: string[];
+  github: string;
+  emoji: string;
+  color: string;
+  highlight?: string;
+}
+
+export interface Experience {
+  role: string;
+  company: string;
+  period: string;
+  bullets: string[];
+}
+
+export interface Education {
+  school: string;
+  degree: string;
+  period: string;
+}
+
+export interface Certification {
+  name: string;
+  issuer: string;
+  emoji: string;
+}
+
+export const PROFILE: Profile = {
   name: "Murtaza Bootwala",
   title: "Computer Engineering @ Cal Poly '29",
   bio: "Hey, I'm Murtaza — a Computer Engineering student at Cal Poly SLO with a passion for building things, whether that's software, robots, or race car components. I love combining hardware and software to solve real problems, and I'm always working on something new.",
   email: "mbootwal@calpoly.edu",
-  phone: "",
-  linkedin: "https://linkedin.com/in/murtazabootwala25",
-  github: "https://github.com/durtymurty",
   location: "San Luis Obispo, CA",
-  avatar: "👨‍💻",
+  links: {
+    linkedin: "https://www.linkedin.com/in/murtazabootwala25",
+    github: "https://github.com/durtymurty",
+  },
 };
 
-export const SKILLS = [
+/** "https://github.com/durtymurty" → "github.com/durtymurty" */
+export const displayUrl = (url: string) => url.replace(/^https?:\/\/(www\.)?/, "");
+
+export const CONTACT_LINKS = [
+  { icon: "✉️", label: "Email", value: PROFILE.email, href: `mailto:${PROFILE.email}`, external: false },
+  { icon: "💼", label: "LinkedIn", value: displayUrl(PROFILE.links.linkedin), href: PROFILE.links.linkedin, external: true },
+  { icon: "🐙", label: "GitHub", value: displayUrl(PROFILE.links.github), href: PROFILE.links.github, external: true },
+];
+
+export const SKILLS: SkillGroup[] = [
   { category: "Languages", items: ["JavaScript", "TypeScript", "Python", "Java", "HTML/CSS"] },
   { category: "Frontend", items: ["React", "Next.js", "Tailwind CSS", "Flutter"] },
   { category: "Backend", items: ["Node.js", "Express.js", "REST APIs"] },
@@ -19,24 +76,28 @@ export const SKILLS = [
   { category: "Engineering", items: ["CAD Modeling", "CNC Operation", "Carbon Fiber", "Robotics"] },
 ];
 
-export const PROJECTS = [
+export const PROJECTS: Project[] = [
   {
+    slug: "ai-code-reviewer",
     name: "AI Code Reviewer",
-    description: "AI-powered code review tool built with Next.js and Claude Sonnet. Detects bugs, security vulnerabilities, performance issues with severity ratings.",
+    description: "AI-powered code review tool built with Next.js and Claude Sonnet. Detects bugs, security vulnerabilities, and performance issues with severity ratings.",
     tech: ["Next.js", "TypeScript", "Claude API", "Tailwind CSS"],
     github: "https://github.com/durtymurty/ai-code-reviewer",
     emoji: "🔍",
     color: "#58a6ff",
   },
   {
+    slug: "foodspect",
     name: "FoodSpect App",
-    description: "Mobile app built with Flutter that helps people with food allergies make safe dietary choices. Features UPC barcode scanner and allergy profile matching. Won 2nd place at WAForge Hackathon.",
+    description: "Mobile app built with Flutter that helps people with food allergies make safe dietary choices. Features a UPC barcode scanner and allergy profile matching.",
     tech: ["Flutter", "Dart", "Open Food Facts API"],
     github: "https://github.com/kridos/WaForgeHackathon",
     emoji: "🍎",
     color: "#3fb950",
+    highlight: "2nd place — WAForge Hackathon",
   },
   {
+    slug: "llm-eval",
     name: "LLM Evaluation Framework",
     description: "Local framework for evaluating and comparing LLMs using semantic similarity scoring, LLM-as-judge, and hallucination detection. Supports multi-model comparison with a live Streamlit dashboard.",
     tech: ["Python", "Ollama", "Sentence Transformers", "Streamlit", "scikit-learn"],
@@ -45,8 +106,9 @@ export const PROJECTS = [
     color: "#a78bfa",
   },
   {
+    slug: "portfolio-os",
     name: "Dev Portfolio OS",
-    description: "This portfolio! Built as a fully functional desktop OS experience with draggable windows, a taskbar, and multiple apps.",
+    description: "This portfolio! A desktop-OS experience with a custom window manager, taskbar, and a dozen apps.",
     tech: ["Next.js", "TypeScript", "Tailwind CSS"],
     github: "https://github.com/durtymurty/portfolio-os",
     emoji: "🖥️",
@@ -54,7 +116,11 @@ export const PROJECTS = [
   },
 ];
 
-export const EXPERIENCE = [
+export const EDUCATION: Education[] = [
+  { school: "Cal Poly SLO", degree: "B.S. Computer Engineering", period: "2025 – 2029" },
+];
+
+export const EXPERIENCE: Experience[] = [
   {
     role: "Aero & Chassis Team",
     company: "Cal Poly Racing",
@@ -87,41 +153,10 @@ export const EXPERIENCE = [
   },
 ];
 
-export const CERTIFICATIONS = [
+export const CERTIFICATIONS: Certification[] = [
   { name: "AWS Cloud Practitioner", issuer: "Amazon Web Services", emoji: "☁️" },
   { name: "Harvard AI Bootcamp", issuer: "Harvard University", emoji: "🎓" },
   { name: "Networking Basics", issuer: "Cisco", emoji: "🌐" },
   { name: "Building with the Claude API", issuer: "Anthropic", emoji: "🤖" },
   { name: "AI Fundamentals", issuer: "Various", emoji: "🧠" },
 ];
-
-export const TERMINAL_RESPONSES: Record<string, string> = {
-  help: `Available commands:
-  about      — Who am I
-  skills     — My tech stack
-  projects   — What I've built
-  contact    — Get in touch
-  education  — My background
-  clear      — Clear terminal
-  whoami     — Quick intro`,
-  about: `Murtaza Bootwala
-Computer Engineering @ Cal Poly SLO '29
-Robotics | Software | AI Enthusiast
-Currently building: AI tools, web apps, race cars`,
-  skills: `Languages:   JavaScript, TypeScript, Python, Java
-Frontend:    React, Next.js, Flutter, Tailwind
-Backend:     Node.js, Express, REST APIs
-Tools:       Git, AWS, VS Code
-AI/ML:       Ollama, Sentence Transformers, LLM Evaluation, Streamlit
-Engineering: CAD, CNC, Carbon Fiber, Robotics`,
-  projects: `[1] AI Code Reviewer        — Next.js + Claude API
-[2] FoodSpect App           — Flutter + Dart
-[3] LLM Evaluation Framework — Python + Ollama + Streamlit
-[4] Portfolio OS            — Next.js + TypeScript`,
-  contact: `Email:    mbootwal@calpoly.edu
-LinkedIn: linkedin.com/in/murtazabootwala25
-GitHub:   github.com/durtymurty`,
-  education: `Cal Poly SLO — B.S. Computer Engineering (2025–2029)`,
-  whoami: `murtaza@portfolio:~$ A builder. An engineer. A problem solver.`,
-  clear: "__CLEAR__",
-};
