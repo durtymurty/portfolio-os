@@ -15,7 +15,7 @@ export default function WorkSection() {
     <section aria-labelledby="work" className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
       <SectionHeader id="work" number="01" title="Selected work" subtitle="Parts list" sheet="2 / 5" />
       <WorkFilter counts={counts}>
-        <ol className="grid gap-6 md:grid-cols-2">
+        <ol className="grid grid-cols-1 gap-6 md:grid-cols-2">
           {PROJECTS.map((project) => (
             <ProjectCard key={project.slug} project={project} />
           ))}

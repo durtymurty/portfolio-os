@@ -7,7 +7,7 @@ export default function Figures({ slots, slug }: { slots: Slot[]; slug: string }
   const isDev = process.env.NODE_ENV === "development";
 
   return (
-    <ol className="grid gap-6 sm:grid-cols-2">
+    <ol className="grid grid-cols-1 gap-6 sm:grid-cols-2">
       {slots.map((slot, i) => (
         <li key={i} className={slots.length % 2 === 1 && i === 0 ? "sm:col-span-2" : undefined}>
           {slot.kind === "photo" ? (

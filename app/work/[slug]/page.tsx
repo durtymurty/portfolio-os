@@ -62,7 +62,7 @@ export default async function CaseStudyPage({ params }: Props) {
           </ol>
         </nav>
 
-        <header className="grid gap-10 lg:grid-cols-[1fr_340px] lg:items-end">
+        <header className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_340px] lg:items-end">
           <div>
             <p className="annot mb-4">{project.kind} · Case study</p>
             <h1 className="text-4xl leading-[1.05] font-semibold tracking-tight text-balance md:text-6xl">{project.name}</h1>
@@ -71,13 +71,13 @@ export default async function CaseStudyPage({ params }: Props) {
 
           <dl className="border-t border-l border-rule-strong text-sm">
             {specs.map(([label, value]) => (
-              <div key={label} className="grid grid-cols-[7.5rem_1fr] border-r border-b border-rule-strong">
+              <div key={label} className="grid grid-cols-[7.5rem_minmax(0,1fr)] border-r border-b border-rule-strong">
                 <dt className="annot border-r border-rule-strong px-3 py-2.5 text-[10px]">{label}</dt>
                 <dd className="px-3 py-2 font-medium">{value}</dd>
               </div>
             ))}
             {project.highlight && (
-              <div className="grid grid-cols-[7.5rem_1fr] border-r border-b border-rule-strong">
+              <div className="grid grid-cols-[7.5rem_minmax(0,1fr)] border-r border-b border-rule-strong">
                 <dt className="annot border-r border-rule-strong px-3 py-2.5 text-[10px]">Note</dt>
                 <dd className="px-3 py-2 font-medium text-accent">{project.highlight}</dd>
               </div>
@@ -87,14 +87,14 @@ export default async function CaseStudyPage({ params }: Props) {
 
         <div aria-hidden="true" className="ruler my-12" />
 
-        <div className="grid gap-12 lg:grid-cols-[1fr_340px]">
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_340px]">
           <section aria-labelledby="contributions">
             <h2 id="contributions" className="mb-6 flex items-baseline gap-3 text-2xl font-semibold tracking-tight">
               <span className="font-mono text-sm font-normal text-accent">A</span> What I did
             </h2>
             <ol className="space-y-4">
               {caseStudy.contributions.map((c, i) => (
-                <li key={c} className="grid grid-cols-[2.5rem_1fr] gap-2 border-b border-rule pb-4 leading-relaxed">
+                <li key={c} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-2 border-b border-rule pb-4 leading-relaxed">
                   <span className="font-mono text-sm text-ink-muted">{String(i + 1).padStart(2, "0")}</span>
                   <span>{c}</span>
                 </li>

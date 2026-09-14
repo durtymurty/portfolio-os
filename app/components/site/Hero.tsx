@@ -22,7 +22,7 @@ export default function Hero() {
         {["1", "2", "3", "4", "5", "6"].map((z) => <span key={z}>{z}</span>)}
       </div>
 
-      <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-8">
+      <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-8">
         <div>
           <p className="annot mb-5 flex items-center gap-3">
             <span className="inline-block h-px w-8 bg-accent" aria-hidden="true" />

@@ -9,10 +9,10 @@ export default function ExperienceSection() {
     <section aria-labelledby="experience" className="mx-auto max-w-6xl px-5 py-16 md:px-8 md:py-24">
       <SectionHeader id="experience" number="02" title="Experience" subtitle="Revision history" sheet="3 / 5" />
 
-      <div className="grid gap-10 lg:grid-cols-[1fr_280px]">
+      <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_280px]">
         <ol className="border-t border-rule-strong">
           {EXPERIENCE.map((exp, i) => (
-            <li key={`${exp.company}-${exp.role}`} className="grid gap-x-6 gap-y-2 border-b border-rule py-6 sm:grid-cols-[3rem_11rem_1fr]">
+            <li key={`${exp.company}-${exp.role}`} className="grid grid-cols-1 gap-x-6 gap-y-2 border-b border-rule py-6 sm:grid-cols-[3rem_11rem_minmax(0,1fr)]">
               <span aria-hidden="true" className="annot hidden pt-1 text-accent sm:block">Rev {rev(i, EXPERIENCE.length)}</span>
               <p className="annot pt-1 normal-case tracking-normal">{exp.period}</p>
               <div>
