@@ -234,7 +234,7 @@ export const EXPERIENCE: Experience[] = [
   },
   {
     role: "Swim Instructor",
-    company: "YMCA of Greater Seattle",
+    company: "YMCA of Seattle",
     period: "Jun 2023 – Sep 2025",
     bullets: [
       "Deliver tailored swim lessons to students across age groups and skill levels",
