@@ -1,0 +1,8 @@
+# Never apply line-ending conversion to binary assets (a CRLF rewrite corrupts PDFs).
+*.pdf  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.avif binary
+*.ico  binary
