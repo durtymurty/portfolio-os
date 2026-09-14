@@ -1,20 +1,39 @@
 import { PROJECTS } from "../../data";
+import { AppTitle, ExternalLink, Icon } from "../ui";
+
+const tileClass =
+  "flex aspect-[4/3] flex-col justify-between gap-2.5 rounded-xl border p-5 transition-transform hover:-translate-y-0.5";
 
 export default function GalleryApp() {
   return (
-    <div style={{ color: "#c9d1d9", display: "flex", flexDirection: "column", gap: "16px" }}>
-      <h1 style={{ fontSize: "20px", fontWeight: "700", color: "#f0f6fc" }}>Project Gallery</h1>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-        {PROJECTS.map(project => (
-          <div key={project.name} style={{ background: `linear-gradient(135deg, ${project.color}20, ${project.color}05)`, border: `1px solid ${project.color}30`, borderRadius: "12px", padding: "20px", display: "flex", flexDirection: "column", gap: "10px", aspectRatio: "4/3", justifyContent: "space-between" }}>
-            <div style={{ fontSize: "48px", textAlign: "center" }}>{project.emoji}</div>
-            <div>
-              <p style={{ fontSize: "14px", fontWeight: "600", color: project.color }}>{project.name}</p>
-              <p style={{ fontSize: "11px", color: "#8b949e", marginTop: "4px", lineHeight: "1.4" }}>{project.tech.join(" · ")}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+    <div className="flex flex-col gap-4">
+      <AppTitle>Project Gallery</AppTitle>
+      <ul className="grid grid-cols-1 gap-3 @md:grid-cols-2">
+        {PROJECTS.map((project) => {
+          const style = {
+            background: `linear-gradient(135deg, ${project.color}20, ${project.color}05)`,
+            borderColor: `${project.color}30`,
+          };
+          const body = (
+            <>
+              <Icon className="text-center text-5xl">{project.emoji}</Icon>
+              <span className="block">
+                <span className="block text-sm font-semibold" style={{ color: project.color }}>{project.name}</span>
+                <span className="mt-1 block text-[11px] leading-snug text-fg-muted">{project.tech.join(" · ")}</span>
+              </span>
+            </>
+          );
+          return (
+            <li key={project.slug}>
+              {project.github ? (
+                <ExternalLink href={project.github} className={tileClass} style={style}>{body}</ExternalLink>
+              ) : (
+                <div className={tileClass} style={style}>{body}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

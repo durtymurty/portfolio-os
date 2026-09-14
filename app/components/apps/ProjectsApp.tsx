@@ -1,28 +1,40 @@
 import { PROJECTS } from "../../data";
+import { AppTitle, buttonClass, ExternalLink, Icon, Tag } from "../ui";
 
 export default function ProjectsApp() {
   return (
-    <div style={{ color: "#c9d1d9", display: "flex", flexDirection: "column", gap: "16px" }}>
-      <h1 style={{ fontSize: "20px", fontWeight: "700", color: "#f0f6fc" }}>Projects</h1>
-      {PROJECTS.map(project => (
-        <div key={project.name} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${project.color}30`, borderRadius: "12px", padding: "16px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "8px" }}>
-            <span style={{ fontSize: "24px" }}>{project.emoji}</span>
-            <h2 style={{ fontSize: "16px", fontWeight: "600", color: project.color }}>{project.name}</h2>
-          </div>
-          <p style={{ fontSize: "13px", color: "#8b949e", lineHeight: "1.6", marginBottom: "12px" }}>{project.description}</p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginBottom: "12px" }}>
-            {project.tech.map(t => (
-              <span key={t} style={{ background: `${project.color}15`, border: `1px solid ${project.color}30`, color: project.color, borderRadius: "4px", padding: "2px 8px", fontSize: "11px" }}>{t}</span>
-            ))}
-          </div>
-          <a href={project.github} target="_blank" rel="noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#58a6ff", textDecoration: "none", padding: "6px 12px", background: "rgba(88,166,255,0.1)", border: "1px solid rgba(88,166,255,0.2)", borderRadius: "6px" }}
+    <div className="flex flex-col gap-4">
+      <AppTitle>Projects</AppTitle>
+      <ul className="flex flex-col gap-4">
+        {PROJECTS.map((project) => (
+          <li
+            key={project.slug}
+            className="rounded-xl border bg-raised p-4"
+            style={{ borderColor: `${project.color}30` }}
           >
-            🐙 View on GitHub
-          </a>
-        </div>
-      ))}
+            <div className="mb-2 flex flex-wrap items-center gap-2.5">
+              <Icon className="text-2xl">{project.emoji}</Icon>
+              <h3 className="text-base font-semibold" style={{ color: project.color }}>{project.name}</h3>
+              {project.highlight && (
+                <span className="rounded-full border border-[#e3b341]/30 bg-[#e3b341]/10 px-2 py-0.5 text-[11px] text-[#e3b341]">
+                  <Icon>🏆</Icon> {project.highlight}
+                </span>
+              )}
+            </div>
+            <p className="mb-3 text-[13px] leading-relaxed text-fg-muted">{project.description}</p>
+            <ul aria-label="Tech stack" className="mb-3 flex flex-wrap gap-1.5">
+              {project.tech.map((t) => (
+                <li key={t}><Tag color={project.color}>{t}</Tag></li>
+              ))}
+            </ul>
+            {project.github && (
+              <ExternalLink href={project.github} className={buttonClass}>
+                <Icon>🐙</Icon> View {project.name} on GitHub
+              </ExternalLink>
+            )}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }

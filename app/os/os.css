@@ -1,0 +1,121 @@
+/* Styles for the /os desktop experience only. Tokens live in globals.css (@theme static). */
+
+@layer components {
+  .os-root {
+    position: fixed;
+    inset: 0;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-inter, ui-sans-serif), ui-sans-serif, system-ui, sans-serif;
+    user-select: none;
+  }
+  .os-root :focus-visible { outline-color: var(--color-accent); }
+  .os-root ::-webkit-scrollbar { width: 6px; height: 6px; }
+  .os-root ::-webkit-scrollbar-track { background: rgb(0 0 0 / 0.2); }
+  .os-root ::-webkit-scrollbar-thumb { background: rgb(255 255 255 / 0.2); border-radius: 3px; }
+
+  .window {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgb(0 0 0 / 0.6);
+    /* Opaque surface — no backdrop-filter needed, which keeps compositing cheap. */
+  }
+
+  .window[data-active="true"] {
+    border-color: rgb(88 166 255 / 0.25);
+  }
+
+  .window-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    flex-shrink: 0;
+    background: rgb(255 255 255 / 0.04);
+    border-bottom: 1px solid var(--color-line);
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+  }
+  .window-header:active { cursor: grabbing; }
+
+  .window-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 20px;
+    user-select: text;
+  }
+
+  .traffic {
+    display: grid;
+    place-items: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    color: transparent;
+    font-size: 10px;
+    line-height: 1;
+    font-weight: 700;
+  }
+  .window-header:hover .traffic,
+  .traffic:focus-visible { color: rgb(0 0 0 / 0.6); }
+
+  .resize-handle {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+    touch-action: none;
+    background: linear-gradient(135deg, transparent 50%, rgb(255 255 255 / 0.15) 50%);
+  }
+
+  .dock-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    font-size: 24px;
+    background: var(--color-raised);
+    border: 1px solid rgb(255 255 255 / 0.06);
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+  }
+  .dock-item:hover .dock-icon,
+  .dock-item:focus-visible .dock-icon {
+    transform: translateY(-6px) scale(1.08);
+  }
+  .dock-item[data-open="true"] .dock-icon {
+    background: rgb(255 255 255 / 0.12);
+    border-color: rgb(88 166 255 / 0.25);
+    box-shadow: 0 0 14px rgb(88 166 255 / 0.25);
+  }
+
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    will-change: transform;
+  }
+}
+
+@keyframes blob1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(60px, -40px) scale(1.1); }
+  66% { transform: translate(-30px, 30px) scale(0.95); }
+}
+@keyframes blob2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-50px, 30px) scale(1.05); }
+  66% { transform: translate(40px, -50px) scale(0.9); }
+}
+@keyframes blob3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, -40px) scale(1.1); }
+}

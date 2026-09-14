@@ -1,29 +1,59 @@
-import { PROFILE } from "../../data";
+"use client";
+
+import { useState } from "react";
+import { CONTACT_LINKS, PROFILE } from "../../data";
+import { AppTitle, ExternalLink, Icon } from "../ui";
+
+const cardClass =
+  "flex items-center gap-3.5 rounded-xl border border-line bg-raised p-4 transition-colors hover:border-os-accent/30 hover:bg-white/[0.06]";
 
 export default function ContactApp() {
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(PROFILE.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard can be blocked (permissions / insecure context); the email is still selectable text.
+    }
+  };
+
   return (
-    <div style={{ color: "#c9d1d9", display: "flex", flexDirection: "column", gap: "20px" }}>
-      <h1 style={{ fontSize: "20px", fontWeight: "700", color: "#f0f6fc" }}>Contact Me</h1>
-      <p style={{ fontSize: "14px", color: "#8b949e", lineHeight: "1.6" }}>
-        I'm always open to new opportunities, collaborations, or just a good conversation about tech. Reach out!
+    <div className="flex flex-col gap-5">
+      <AppTitle>Contact Me</AppTitle>
+      <p className="text-sm leading-relaxed text-fg-muted">
+        I&apos;m always open to new opportunities, collaborations, or just a good conversation about tech. Reach out!
       </p>
-      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-        {[
-          { icon: "✉️", label: "Email", value: PROFILE.email, href: `mailto:${PROFILE.email}`, color: "#58a6ff" },
-          { icon: "💼", label: "LinkedIn", value: "murtazabootwala25", href: PROFILE.linkedin, color: "#0077b5" },
-          { icon: "🐙", label: "GitHub", value: "durtymurty", href: PROFILE.github, color: "#f0f6fc" },
-        ].map(item => (
-          <a key={item.label} href={item.href} target="_blank" rel="noreferrer"
-            style={{ display: "flex", gap: "14px", alignItems: "center", padding: "16px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", textDecoration: "none", transition: "all 0.2s" }}
-          >
-            <span style={{ fontSize: "24px" }}>{item.icon}</span>
-            <div>
-              <p style={{ fontSize: "11px", color: "#8b949e", textTransform: "uppercase", letterSpacing: "1px" }}>{item.label}</p>
-              <p style={{ fontSize: "14px", color: item.color, fontWeight: "500", marginTop: "2px" }}>{item.value}</p>
-            </div>
-          </a>
-        ))}
-      </div>
+      <ul className="flex flex-col gap-2.5">
+        {CONTACT_LINKS.map((item) => {
+          const body = (
+            <>
+              <Icon className="text-2xl">{item.icon}</Icon>
+              <span>
+                <span className="block text-[11px] tracking-widest text-fg-muted uppercase">{item.label}</span>
+                <span className="mt-0.5 block text-sm font-medium text-fg-strong">{item.value}</span>
+              </span>
+            </>
+          );
+          return (
+            <li key={item.label}>
+              {item.external ? (
+                <ExternalLink href={item.href} className={cardClass}>{body}</ExternalLink>
+              ) : (
+                <div className="flex gap-2">
+                  <a href={item.href} className={`${cardClass} flex-1`}>{body}</a>
+                  <button type="button" onClick={copyEmail} className={`${cardClass} shrink-0 text-xs text-os-accent`}>
+                    {copied ? "Copied!" : "Copy"}
+                  </button>
+                </div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+      <p role="status" className="sr-only">{copied ? "Email address copied to clipboard" : ""}</p>
     </div>
   );
 }

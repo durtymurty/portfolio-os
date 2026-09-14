@@ -1,72 +1,128 @@
 "use client";
 
 import { useState } from "react";
-import { PROJECTS } from "../../data";
+import { CERTIFICATIONS, EXPERIENCE, PROJECTS, SKILLS } from "../../data";
+import { buttonClass, ExternalLink, Icon, Tag } from "../ui";
+
+interface FileItem {
+  name: string;
+  emoji: string;
+  color: string;
+  subtitle?: string;
+  body: string[];
+  tags: string[];
+  link?: string;
+}
+
+// Every folder is derived from data.ts so this app can never drift out of date.
+const FOLDERS: { name: string; items: FileItem[] }[] = [
+  {
+    name: "Projects",
+    items: PROJECTS.map((p) => ({
+      name: p.name,
+      emoji: p.emoji,
+      color: p.color,
+      subtitle: p.highlight && `🏆 ${p.highlight}`,
+      body: [p.description],
+      tags: p.tech,
+      link: p.github,
+    })),
+  },
+  {
+    name: "Experience",
+    items: EXPERIENCE.map((e) => ({
+      name: e.company,
+      emoji: "🛠️",
+      color: "#58a6ff",
+      subtitle: `${e.role} · ${e.period}`,
+      body: e.bullets,
+      tags: [],
+    })),
+  },
+  {
+    name: "Skills",
+    items: SKILLS.map((s) => ({ name: s.category, emoji: "⚡", color: "#d2a8ff", body: [], tags: s.items })),
+  },
+  {
+    name: "Certifications",
+    items: CERTIFICATIONS.map((c) => ({ name: c.name, emoji: c.emoji, color: "#e3b341", subtitle: c.issuer, body: [], tags: [] })),
+  },
+];
 
 export default function FileExplorerApp() {
-  const [selected, setSelected] = useState<string | null>(null);
-  const [openFolder, setOpenFolder] = useState<string | null>(null);
+  const [folderName, setFolderName] = useState(FOLDERS[0].name);
+  const [itemName, setItemName] = useState<string | null>(null);
 
-  const folders = [
-    { name: "Projects", emoji: "📁", items: PROJECTS.map(p => ({ name: p.name, emoji: p.emoji, desc: p.description, tech: p.tech, github: p.github, color: p.color })) },
-    { name: "Skills", emoji: "📁", items: [{ name: "View Skills", emoji: "⚡", desc: "JavaScript, TypeScript, Python, React, Next.js, Node.js, Flutter, AWS", tech: [], github: "", color: "#58a6ff" }] },
-    { name: "Certifications", emoji: "📁", items: [
-      { name: "AWS Cloud Practitioner", emoji: "☁️", desc: "Amazon Web Services — Cloud computing fundamentals", tech: [], github: "", color: "#ff9900" },
-      { name: "Harvard AI Bootcamp", emoji: "🎓", desc: "Harvard University — AI and machine learning fundamentals", tech: [], github: "", color: "#a51c30" },
-      { name: "Building with Claude API", emoji: "🤖", desc: "Anthropic — Building applications with Claude", tech: [], github: "", color: "#cc785c" },
-    ]},
-  ];
-
-  const selectedFolder = folders.find(f => f.name === openFolder);
-  const selectedItem = selectedFolder?.items.find(i => i.name === selected);
+  const folder = FOLDERS.find((f) => f.name === folderName)!;
+  const item = folder.items.find((i) => i.name === itemName);
 
   return (
-    <div style={{ display: "flex", height: "100%", gap: "0" }}>
-      {/* Sidebar */}
-      <div style={{ width: "180px", borderRight: "1px solid rgba(255,255,255,0.08)", paddingRight: "12px", display: "flex", flexDirection: "column", gap: "4px", flexShrink: 0 }}>
-        <p style={{ fontSize: "11px", color: "#8b949e", textTransform: "uppercase", letterSpacing: "1px", marginBottom: "8px" }}>Folders</p>
-        {folders.map(folder => (
-          <button key={folder.name} onClick={() => { setOpenFolder(folder.name); setSelected(null); }}
-            style={{ display: "flex", alignItems: "center", gap: "8px", padding: "8px 10px", borderRadius: "6px", border: "none", background: openFolder === folder.name ? "rgba(88,166,255,0.1)" : "transparent", color: openFolder === folder.name ? "#58a6ff" : "#c9d1d9", fontSize: "13px", cursor: "pointer", width: "100%", textAlign: "left" }}
+    <div className="grid h-full grid-cols-1 gap-3 @lg:grid-cols-[150px_1fr] @3xl:grid-cols-[150px_1fr_240px]">
+      <nav aria-label="Folders" className="flex gap-1 overflow-x-auto border-line @lg:flex-col @lg:border-r @lg:pr-3">
+        <p className="mb-2 hidden text-[11px] tracking-widest text-fg-muted uppercase @lg:block">Folders</p>
+        {FOLDERS.map((f) => (
+          <button
+            key={f.name}
+            type="button"
+            aria-current={f.name === folderName}
+            onClick={() => { setFolderName(f.name); setItemName(null); }}
+            className={`shrink-0 rounded-md px-2.5 py-2 text-left text-[13px] ${
+              f.name === folderName ? "bg-os-accent/10 text-os-accent" : "text-fg hover:bg-white/5"
+            }`}
           >
-            {folder.emoji} {folder.name}
+            <Icon>📁</Icon> {f.name}
           </button>
         ))}
-      </div>
+      </nav>
 
-      {/* File list */}
-      <div style={{ flex: 1, padding: "0 12px", display: "flex", flexDirection: "column", gap: "4px", overflowY: "auto" }}>
-        {!openFolder && <p style={{ color: "#8b949e", fontSize: "13px", marginTop: "20px", textAlign: "center" }}>Select a folder</p>}
-        {selectedFolder?.items.map(item => (
-          <button key={item.name} onClick={() => setSelected(item.name)}
-            style={{ display: "flex", alignItems: "center", gap: "10px", padding: "10px 12px", borderRadius: "8px", border: "none", background: selected === item.name ? "rgba(88,166,255,0.1)" : "rgba(255,255,255,0.02)", color: "#c9d1d9", fontSize: "13px", cursor: "pointer", textAlign: "left", borderLeft: selected === item.name ? `3px solid ${item.color}` : "3px solid transparent" }}
-          >
-            <span style={{ fontSize: "18px" }}>{item.emoji}</span>
-            {item.name}
-          </button>
+      <ul aria-label={`${folderName} files`} className="flex min-h-0 flex-col gap-1 overflow-y-auto">
+        {folder.items.map((i) => (
+          <li key={i.name}>
+            <button
+              type="button"
+              aria-pressed={i.name === itemName}
+              onClick={() => setItemName(i.name === itemName ? null : i.name)}
+              className="flex w-full items-center gap-2.5 rounded-lg border-l-[3px] px-3 py-2.5 text-left text-[13px] text-fg hover:bg-white/5"
+              style={{
+                borderColor: i.name === itemName ? i.color : "transparent",
+                background: i.name === itemName ? "rgb(88 166 255 / 0.1)" : undefined,
+              }}
+            >
+              <Icon className="text-lg">{i.emoji}</Icon>
+              {i.name}
+            </button>
+            {/* Narrow windows: preview expands inline under the selected file. */}
+            {i.name === itemName && <Preview item={i} className="mt-1 mb-2 px-3 @3xl:hidden" />}
+          </li>
         ))}
-      </div>
+      </ul>
 
-      {/* Preview */}
-      {selectedItem && (
-        <div style={{ width: "220px", borderLeft: "1px solid rgba(255,255,255,0.08)", paddingLeft: "16px", flexShrink: 0 }}>
-          <div style={{ fontSize: "36px", textAlign: "center", marginBottom: "12px" }}>{selectedItem.emoji}</div>
-          <p style={{ fontSize: "14px", fontWeight: "600", color: selectedItem.color, marginBottom: "8px" }}>{selectedItem.name}</p>
-          <p style={{ fontSize: "12px", color: "#8b949e", lineHeight: "1.5", marginBottom: "12px" }}>{selectedItem.desc}</p>
-          {selectedItem.tech.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginBottom: "12px" }}>
-              {selectedItem.tech.map(t => (
-                <span key={t} style={{ background: `${selectedItem.color}15`, color: selectedItem.color, borderRadius: "4px", padding: "2px 6px", fontSize: "10px" }}>{t}</span>
-              ))}
-            </div>
-          )}
-          {selectedItem.github && (
-            <a href={selectedItem.github} target="_blank" rel="noreferrer"
-              style={{ fontSize: "11px", color: "#58a6ff", textDecoration: "none" }}
-            >View on GitHub →</a>
-          )}
-        </div>
+      {item ? (
+        <Preview item={item} className="hidden border-l border-line pl-4 @3xl:block" />
+      ) : (
+        <p className="hidden pt-5 text-center text-[13px] text-fg-muted @3xl:block">Select a file to preview</p>
       )}
     </div>
+  );
+}
+
+function Preview({ item, className }: { item: FileItem; className: string }) {
+  return (
+    <section aria-label={`${item.name} details`} className={className}>
+      <Icon className="mb-3 block text-center text-4xl">{item.emoji}</Icon>
+      <h3 className="text-sm font-semibold" style={{ color: item.color }}>{item.name}</h3>
+      {item.subtitle && <p className="mb-2 text-xs text-fg-muted">{item.subtitle}</p>}
+      {item.body.map((b) => (
+        <p key={b} className="mb-2 text-xs leading-normal text-fg-muted">{b}</p>
+      ))}
+      {item.tags.length > 0 && (
+        <ul className="mb-3 flex flex-wrap gap-1">
+          {item.tags.map((t) => <li key={t}><Tag color={item.color}>{t}</Tag></li>)}
+        </ul>
+      )}
+      {item.link && (
+        <ExternalLink href={item.link} className={buttonClass}>View on GitHub →</ExternalLink>
+      )}
+    </section>
   );
 }

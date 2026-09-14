@@ -1,55 +1,62 @@
-import { PROFILE, CERTIFICATIONS } from "../../data";
+import { CERTIFICATIONS, CONTACT_LINKS, PROFILE } from "../../data";
+import { Card, ExternalLink, Icon, SectionHeading } from "../ui";
+
+const linkRow =
+  "flex items-center gap-2.5 rounded-lg border border-white/5 bg-raised px-3 py-2 text-[13px] text-os-accent transition-colors hover:border-os-accent/30";
 
 export default function AboutApp() {
   return (
-    <div style={{ color: "#c9d1d9", display: "flex", flexDirection: "column", gap: "24px" }}>
-      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-        <div style={{ width: "80px", height: "80px", borderRadius: "50%", background: "linear-gradient(135deg, #58a6ff, #bc8cff)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "36px", flexShrink: 0 }}>
-          {PROFILE.avatar}
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center gap-5">
+        <div aria-hidden="true" className="grid size-20 shrink-0 place-items-center rounded-full bg-linear-135 from-os-accent to-[#bc8cff] text-4xl">
+          👨‍💻
         </div>
         <div>
-          <h1 style={{ fontSize: "24px", fontWeight: "700", color: "#f0f6fc" }}>{PROFILE.name}</h1>
-          <p style={{ color: "#58a6ff", fontSize: "14px", marginTop: "4px" }}>{PROFILE.title}</p>
-          <p style={{ color: "#8b949e", fontSize: "12px", marginTop: "2px" }}>📍 {PROFILE.location}</p>
+          <h2 className="text-2xl font-bold text-fg-strong">{PROFILE.name}</h2>
+          <p className="mt-1 text-sm text-os-accent">{PROFILE.title}</p>
+          <p className="mt-0.5 text-xs text-fg-muted"><Icon>📍</Icon> {PROFILE.location}</p>
         </div>
       </div>
 
-      <div style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: "10px", padding: "16px" }}>
-        <p style={{ fontSize: "14px", lineHeight: "1.7", color: "#c9d1d9" }}>{PROFILE.bio}</p>
-      </div>
+      <Card className="p-4">
+        <p className="text-sm leading-relaxed">{PROFILE.bio}</p>
+      </Card>
 
-      <div>
-        <h2 style={{ fontSize: "14px", fontWeight: "600", color: "#f0f6fc", marginBottom: "12px" }}>📬 Contact</h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          {[
-            { icon: "✉️", label: PROFILE.email, href: `mailto:${PROFILE.email}` },
-            { icon: "💼", label: "linkedin.com/in/murtazabootwala25", href: PROFILE.linkedin },
-            { icon: "🐙", label: "github.com/durtymurty", href: PROFILE.github },
-          ].map(item => (
-            <a key={item.label} href={item.href} target="_blank" rel="noreferrer"
-              style={{ display: "flex", gap: "10px", alignItems: "center", fontSize: "13px", color: "#8b949e", textDecoration: "none", padding: "8px 12px", background: "rgba(255,255,255,0.03)", borderRadius: "8px", border: "1px solid rgba(255,255,255,0.06)" }}
-            >
-              <span>{item.icon}</span>
-              <span style={{ color: "#58a6ff" }}>{item.label}</span>
-            </a>
+      <section>
+        <SectionHeading>Contact</SectionHeading>
+        <ul className="flex flex-col gap-2">
+          {CONTACT_LINKS.map((item) => (
+            <li key={item.label}>
+              {item.external ? (
+                <ExternalLink href={item.href} className={linkRow}>
+                  <Icon>{item.icon}</Icon> {item.value}
+                </ExternalLink>
+              ) : (
+                <a href={item.href} className={linkRow}>
+                  <Icon>{item.icon}</Icon> {item.value}
+                </a>
+              )}
+            </li>
           ))}
-        </div>
-      </div>
+        </ul>
+      </section>
 
-      <div>
-        <h2 style={{ fontSize: "14px", fontWeight: "600", color: "#f0f6fc", marginBottom: "12px" }}>🏆 Certifications</h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          {CERTIFICATIONS.map(cert => (
-            <div key={cert.name} style={{ display: "flex", gap: "10px", alignItems: "center", padding: "10px 12px", background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: "8px" }}>
-              <span style={{ fontSize: "20px" }}>{cert.emoji}</span>
-              <div>
-                <p style={{ fontSize: "13px", color: "#f0f6fc", fontWeight: "500" }}>{cert.name}</p>
-                <p style={{ fontSize: "11px", color: "#8b949e" }}>{cert.issuer}</p>
-              </div>
-            </div>
+      <section>
+        <SectionHeading>Certifications</SectionHeading>
+        <ul className="flex flex-col gap-2">
+          {CERTIFICATIONS.map((cert) => (
+            <li key={cert.name}>
+              <Card className="flex items-center gap-2.5 px-3 py-2.5">
+                <Icon className="text-xl">{cert.emoji}</Icon>
+                <div>
+                  <p className="text-[13px] font-medium text-fg-strong">{cert.name}</p>
+                  <p className="text-[11px] text-fg-muted">{cert.issuer}</p>
+                </div>
+              </Card>
+            </li>
           ))}
-        </div>
-      </div>
+        </ul>
+      </section>
     </div>
   );
 }
