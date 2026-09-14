@@ -24,7 +24,8 @@ export default function Header() {
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-4 px-5 md:px-8">
         <Link href="/" className="flex items-center gap-2.5 font-mono text-sm font-medium tracking-tight">
           <span aria-hidden="true" className="grid size-7 place-items-center border border-ink text-[11px]">MB</span>
-          <span className="hidden sm:inline">Murtaza Bootwala</span>
+          {/* Visually hidden on phones but always announced, so the home link keeps its name. */}
+          <span className="sr-only sm:not-sr-only">Murtaza Bootwala</span>
         </Link>
 
         <nav aria-label="Primary" className="ml-auto hidden md:block">
