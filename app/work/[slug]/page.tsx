@@ -39,12 +39,14 @@ export default async function CaseStudyPage({ params }: Props) {
   const { caseStudy } = project;
   const slots = fillSlots(getProjectFigures(project), caseStudy.photoSlots);
   const software = project.kind === "software";
+  const features = caseStudy.features ?? [];
   const challenges = caseStudy.challenges ?? [];
 
   // Section letters are assigned in order so optional sections never leave gaps (A, B, C…).
   const sections = [
     "overview",
     "stack",
+    ...(features.length ? ["features"] : []),
     ...(challenges.length ? ["challenges"] : []),
     ...(slots.length ? ["figures"] : []),
   ];
@@ -126,6 +128,22 @@ export default async function CaseStudyPage({ params }: Props) {
             </ul>
           </aside>
         </div>
+
+        {features.length > 0 && (
+          <section aria-labelledby="features" className="mt-16">
+            <h2 id="features" className="mb-6 flex items-baseline gap-3 text-2xl font-semibold tracking-tight">
+              <span className="font-mono text-sm font-normal text-accent">{letter("features")}</span> Features
+            </h2>
+            <ul className="grid grid-cols-1 border-t border-l border-rule-strong sm:grid-cols-2">
+              {features.map((f, i) => (
+                <li key={f} className="grid grid-cols-[2.5rem_minmax(0,1fr)] gap-2 border-r border-b border-rule-strong bg-paper-raised px-4 py-3.5 leading-relaxed">
+                  <span className="font-mono text-sm text-accent">{String(i + 1).padStart(2, "0")}</span>
+                  <span>{f}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
         {challenges.length > 0 && (
           <section aria-labelledby="challenges" className="mt-16">

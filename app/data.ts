@@ -44,6 +44,8 @@ export interface Project {
      * Software: how the system works, step by step.
      */
     contributions: string[];
+    /** Finished, user-facing features (never list planned or partial work here). */
+    features?: string[];
     /** Real problems hit while building it and how they were solved. */
     challenges?: { title: string; detail: string }[];
     /** Number of figure slots to show; unfilled slots render as "photo pending". 0 hides figures. */
@@ -209,6 +211,37 @@ export const PROJECTS: Project[] = [
           title: "GitHub Actions cron was unreliable in production",
           detail: "The first scheduler ran on GitHub Actions cron, which managed only about 8 runs over several weeks. The scheduler was rebuilt on Supabase pg_cron, running every minute.",
         },
+      ],
+      photoSlots: 0,
+    },
+  },
+  {
+    slug: "sakkas-inven-app",
+    kind: "software",
+    name: "sakkas-inven-app",
+    description: "QR-code warehouse inventory system for Sakkas Store, built to replace a manual process where workers searched aisles using handwritten labels and pen-marked quantities.",
+    tech: ["Next.js", "Postgres", "Neon", "html5-qrcode", "qrcode", "Vercel"],
+    emoji: "📦",
+    color: "#8b5cf6",
+    org: "Sakkas Store",
+    details: [
+      "Each box's QR code points to a database ID, so a scan shows live contents, location, and quantity",
+      "Picking an item decrements its quantity through an API route; at zero it's removed from the box",
+      "Camera scanning, bulk A4 label printing, a searchable catalog, and per-box activity history",
+    ],
+    caseStudy: {
+      contributions: [
+        "Each physical box gets a QR code that's just a pointer to a database ID",
+        "Scanning a box queries Postgres live and shows its current contents, location, and quantity — so it's always accurate, regardless of who last picked from it",
+        "Picking an item decrements its quantity through an API route; when the quantity hits zero, the item is removed from the box",
+        "Users pick their name and enter a PIN on a sign-in screen, and that name is recorded against their activity",
+      ],
+      features: [
+        "Camera-based QR scanning with double-scan protection and a manual fallback",
+        "Box create, read, update, and delete, with location tracking",
+        "Bulk A4 label-sheet printing with duplicate-ID prevention",
+        "Live, searchable catalog backed by debounced database queries",
+        "Per-box activity history",
       ],
       photoSlots: 0,
     },
