@@ -149,7 +149,7 @@ export const PROJECTS: Project[] = [
     kind: "hardware",
     name: "FRC Robot Fabrication",
     description: "Led the fabrication team for FRC Team 2976 Spartabots, taking custom competition robot parts from CAD models to CNC-machined components.",
-    tech: ["CAD Modeling", "CNC Operation", "Robotics"],
+    tech: ["CAD Modeling", "Onshape", "CNC Operation", "Robotics"],
     emoji: "🤖",
     color: "#3fb950",
     highlight: "Fabrication Lead — team of 10",
@@ -166,6 +166,9 @@ export const PROJECTS: Project[] = [
       contributions: [
         "Guided a team of 10 members through detailed robotics fabrication tasks, ensuring all parts met strict specifications under competition deadlines",
         "Designed and generated CAD models, translating design concepts into machine-operable instructions",
+        "Designed and contributed to the full CAD model of the competition robot in Onshape, focused on creating a functional, manufacturable system integrating mechanical, structural, and game-specific mechanisms",
+        "The robot's design included a multi-jointed arm system for object manipulation, the drivetrain layout, and component placement optimized for balance, strength, and efficiency",
+        "Iterated on designs with teammates, ensured compatibility between subsystems, and translated concepts into precise, build-ready models",
         "Operated CNC machinery and oversaw the transformation of raw materials into precise components",
         "Managed workflow and quality assurance processes while promoting strong communication throughout the team",
         "Troubleshot fabrication challenges in real time, minimizing delays and maintaining productivity",
