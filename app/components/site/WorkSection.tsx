@@ -82,6 +82,12 @@ function ProjectCard({ project }: { project: Project }) {
                 <span className="sr-only"> for {project.name} (opens in a new tab)</span>
               </a>
             )}
+            {project.devpost && (
+              <a href={project.devpost} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 link-ink">
+                Devpost <span aria-hidden="true" className="font-mono">↗</span>
+                <span className="sr-only"> page for {project.name} (opens in a new tab)</span>
+              </a>
+            )}
           </div>
         </div>
       </article>

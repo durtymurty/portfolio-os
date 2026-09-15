@@ -23,6 +23,8 @@ export interface Project {
   description: string;
   tech: string[];
   github?: string;
+  /** Hackathon project page on Devpost. */
+  devpost?: string;
   emoji: string;
   color: string;
   highlight?: string;
@@ -212,6 +214,23 @@ export const PROJECTS: Project[] = [
     },
   },
   {
+    slug: "meetingtax",
+    kind: "software",
+    name: "MeetingTax",
+    description: "Full-stack B2B SaaS app that calculates the real-time dollar cost of meetings based on attendee salaries.",
+    tech: ["Next.js", "AWS DynamoDB", "Claude API", "Vercel"],
+    github: "https://github.com/durtymurty/meetingtax",
+    devpost: "https://devpost.com/software/meetingtax",
+    emoji: "⏱️",
+    color: "#14b8a6",
+    highlight: "Built for H0: Hack the Zero Stack (Amazon & Vercel)",
+    details: [
+      "AWS DynamoDB for live data",
+      "AI-generated cost insights with Claude Haiku",
+      "Built and deployed on Vercel",
+    ],
+  },
+  {
     slug: "ai-code-reviewer",
     kind: "software",
     name: "AI Code Reviewer",
@@ -228,6 +247,7 @@ export const PROJECTS: Project[] = [
     description: "Mobile app built with Flutter that helps people with food allergies make safe dietary choices. Features a UPC barcode scanner and allergy profile matching.",
     tech: ["Flutter", "Dart", "Open Food Facts API"],
     github: "https://github.com/kridos/WaForgeHackathon",
+    devpost: "https://devpost.com/software/foodspect-app",
     emoji: "🍎",
     color: "#3fb950",
     highlight: "2nd place — WAForge Hackathon",
