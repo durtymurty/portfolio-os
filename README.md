@@ -24,7 +24,10 @@ My work sits between hardware and software — composite parts for a Formula SAE
 The hero drawing solves two-link inverse kinematics every animation frame, so the arm's wrist stays locked to your cursor — even under fast, erratic movement. Joint angles, wrist coordinates, and reach status update live beneath the drawing, and a dimension line and angle arcs move with the arm. When no one is steering, it traces a slow figure-eight. It pauses when scrolled out of view and stays still for visitors who prefer reduced motion.
 
 ### Spec-sheet case studies
-Hardware projects — the **Formula SAE carbon chassis** with Cal Poly Racing and **FRC robot fabrication** with Team 2976 Spartabots — each have a dedicated case study page with a specifications table, a numbered breakdown of contributions, and the fabrication processes involved.
+Selected projects each have a dedicated case study page with a specifications table and a numbered breakdown of the work:
+
+- **Formula SAE carbon chassis** with Cal Poly Racing and **FRC robot fabrication** with Team 2976 Spartabots — contributions and the fabrication processes involved.
+- **Sakkas Poster** — a live full-stack app that automates social media posting for Sakkas Store, a Shopify-based fashion brand. It turns a product URL into a Facebook and Instagram carousel post with a Claude-written caption, and the case study covers the real engineering problems along the way: a mid-project Shopify auth migration, Meta's permission-flow change, and replacing an unreliable GitHub Actions cron with a Supabase pg_cron scheduler.
 
 ### Command palette
 Press <kbd>⌘</kbd> <kbd>K</kbd> (or <kbd>Ctrl</kbd> <kbd>K</kbd>) anywhere to jump to a section or case study, download the resume, copy the email address, open GitHub or LinkedIn, or switch themes — all from the keyboard.

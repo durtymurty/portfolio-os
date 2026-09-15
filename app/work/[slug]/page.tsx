@@ -38,6 +38,17 @@ export default async function CaseStudyPage({ params }: Props) {
 
   const { caseStudy } = project;
   const slots = fillSlots(getProjectFigures(project), caseStudy.photoSlots);
+  const software = project.kind === "software";
+  const challenges = caseStudy.challenges ?? [];
+
+  // Section letters are assigned in order so optional sections never leave gaps (A, B, C…).
+  const sections = [
+    "overview",
+    "stack",
+    ...(challenges.length ? ["challenges"] : []),
+    ...(slots.length ? ["figures"] : []),
+  ];
+  const letter = (id: string) => String.fromCharCode(65 + sections.indexOf(id));
   const idx = CASE_STUDIES.indexOf(project);
   const next = CASE_STUDIES[(idx + 1) % CASE_STUDIES.length];
 
@@ -90,7 +101,8 @@ export default async function CaseStudyPage({ params }: Props) {
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1fr)_340px]">
           <section aria-labelledby="contributions">
             <h2 id="contributions" className="mb-6 flex items-baseline gap-3 text-2xl font-semibold tracking-tight">
-              <span className="font-mono text-sm font-normal text-accent">A</span> What I did
+              <span className="font-mono text-sm font-normal text-accent">{letter("overview")}</span>{" "}
+              {software ? "How it works" : "What I did"}
             </h2>
             <ol className="space-y-4">
               {caseStudy.contributions.map((c, i) => (
@@ -104,7 +116,8 @@ export default async function CaseStudyPage({ params }: Props) {
 
           <aside aria-labelledby="process">
             <h2 id="process" className="mb-6 flex items-baseline gap-3 text-2xl font-semibold tracking-tight">
-              <span className="font-mono text-sm font-normal text-accent">B</span> Processes
+              <span className="font-mono text-sm font-normal text-accent">{letter("stack")}</span>{" "}
+              {software ? "Stack" : "Processes"}
             </h2>
             <ul className="flex flex-wrap gap-2">
               {project.tech.map((t) => (
@@ -114,12 +127,31 @@ export default async function CaseStudyPage({ params }: Props) {
           </aside>
         </div>
 
-        <section aria-labelledby="figures" className="mt-16">
-          <h2 id="figures" className="mb-6 flex items-baseline gap-3 text-2xl font-semibold tracking-tight">
-            <span className="font-mono text-sm font-normal text-accent">C</span> Figures
-          </h2>
-          <Figures slots={slots} slug={project.slug} />
-        </section>
+        {challenges.length > 0 && (
+          <section aria-labelledby="challenges" className="mt-16">
+            <h2 id="challenges" className="mb-6 flex items-baseline gap-3 text-2xl font-semibold tracking-tight">
+              <span className="font-mono text-sm font-normal text-accent">{letter("challenges")}</span> Engineering challenges
+            </h2>
+            <ol className="grid grid-cols-1 gap-6 md:grid-cols-3">
+              {challenges.map((c, i) => (
+                <li key={c.title} className="crop flex flex-col border border-rule bg-paper-raised p-5">
+                  <span className="annot text-accent">Issue {String(i + 1).padStart(2, "0")}</span>
+                  <h3 className="mt-2 text-lg leading-snug font-semibold tracking-tight">{c.title}</h3>
+                  <p className="mt-3 leading-relaxed text-ink-muted">{c.detail}</p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        {slots.length > 0 && (
+          <section aria-labelledby="figures" className="mt-16">
+            <h2 id="figures" className="mb-6 flex items-baseline gap-3 text-2xl font-semibold tracking-tight">
+              <span className="font-mono text-sm font-normal text-accent">{letter("figures")}</span> Figures
+            </h2>
+            <Figures slots={slots} slug={project.slug} />
+          </section>
+        )}
 
         <nav aria-label="More work" className="mt-20 flex flex-wrap items-center justify-between gap-4 border-t border-rule-strong pt-6">
           <Link href="/#work" className="link-ink">← All work</Link>

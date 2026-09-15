@@ -36,10 +36,15 @@ export interface Project {
    * Photos are picked up automatically from public/work/[slug]/ — see README.
    */
   caseStudy?: {
-    location: string;
-    /** Full contribution list (wording from the resume). */
+    location?: string;
+    /**
+     * Hardware: what I did (wording from the resume).
+     * Software: how the system works, step by step.
+     */
     contributions: string[];
-    /** Number of figure slots to show; unfilled slots render as "photo pending". */
+    /** Real problems hit while building it and how they were solved. */
+    challenges?: { title: string; detail: string }[];
+    /** Number of figure slots to show; unfilled slots render as "photo pending". 0 hides figures. */
     photoSlots: number;
   };
 }
@@ -162,6 +167,48 @@ export const PROJECTS: Project[] = [
         "Troubleshot fabrication challenges in real time, minimizing delays and maintaining productivity",
       ],
       photoSlots: 3,
+    },
+  },
+  {
+    slug: "sakkas-poster",
+    kind: "software",
+    name: "Sakkas Poster",
+    description: "Full-stack app that fully automates social media posting for Sakkas Store, a Shopify-based fashion brand — from a product URL to a carousel post on Facebook and Instagram.",
+    tech: ["Next.js", "Supabase", "Postgres", "pg_cron", "Shopify Admin API", "Meta Graph API", "Claude API", "Telegram Bot API", "Vercel"],
+    emoji: "📣",
+    color: "#ec4899",
+    highlight: "Live — posting to the store's Facebook and Instagram",
+    org: "Sakkas Store",
+    details: [
+      "Turns a Shopify product URL into a Facebook and Instagram carousel post, published now or scheduled",
+      "Generates on-brand captions with Claude in a fixed description, product link, hashtags format",
+      "Rebuilt scheduling on Supabase pg_cron after GitHub Actions cron proved unreliable in production",
+    ],
+    caseStudy: {
+      contributions: [
+        "Takes a Shopify product URL and fetches all of the product's photos through the Shopify Admin API",
+        "Processes every photo into a consistent 4:5 ratio",
+        "Generates an on-brand caption with Claude (Anthropic API) in a fixed format: description, then product link, then hashtags",
+        "Posts or schedules a carousel simultaneously to Facebook and Instagram through the Meta Graph API",
+        "Stores the scheduling queue, post history, and images in Supabase (Postgres)",
+        "Runs a custom Supabase pg_cron scheduler every minute, since Instagram has no native scheduling API",
+        "Sends live-post notifications through the Telegram Bot API",
+      ],
+      challenges: [
+        {
+          title: "Shopify retired its auth flow mid-project",
+          detail: "Shopify retired its old auth flow partway through the project, so the app was migrated to a client-credentials grant.",
+        },
+        {
+          title: "Meta changed its app permission flow",
+          detail: "Meta changed its app permission flow, so Instagram publish permissions had to be obtained through the Facebook Login path.",
+        },
+        {
+          title: "GitHub Actions cron was unreliable in production",
+          detail: "The first scheduler ran on GitHub Actions cron, which managed only about 8 runs over several weeks. The scheduler was rebuilt on Supabase pg_cron, running every minute.",
+        },
+      ],
+      photoSlots: 0,
     },
   },
   {
