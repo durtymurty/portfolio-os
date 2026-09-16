@@ -27,7 +27,7 @@ The hero drawing solves two-link inverse kinematics every animation frame, so th
 Selected projects each have a dedicated case study page with a specifications table and a numbered breakdown of the work:
 
 - **Formula SAE carbon chassis** with Cal Poly Racing and **FRC robot fabrication** with Team 2976 Spartabots — contributions and the fabrication processes involved.
-- **Sakkas Poster** — a live full-stack app that automates social media posting for Sakkas Store, a Shopify-based fashion brand. It turns a product URL into a Facebook and Instagram carousel post with a Claude-written caption, and the case study covers the real engineering problems along the way: a mid-project Shopify auth migration, Meta's permission-flow change, and replacing an unreliable GitHub Actions cron with a Supabase pg_cron scheduler.
+- **Sakkas Poster** — a live full-stack app that automates social media posting for Sakkas Store, a fashion brand. It turns a product URL into a Facebook and Instagram carousel post with a Claude-written caption, and the case study covers the real engineering problems along the way: a mid-project Shopify auth migration, Meta's permission-flow change, and replacing an unreliable GitHub Actions cron with a Supabase pg_cron scheduler.
 - **sakkas-inven-app** — a QR-code warehouse inventory system for Sakkas Store, built to replace searching aisles by handwritten labels. Each box's QR code points to a database record, so a scan always shows live contents, location, and quantity.
 
 ### Command palette

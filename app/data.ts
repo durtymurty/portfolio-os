@@ -180,7 +180,7 @@ export const PROJECTS: Project[] = [
     slug: "sakkas-poster",
     kind: "software",
     name: "Sakkas Poster",
-    description: "Full-stack app that fully automates social media posting for Sakkas Store, a Shopify-based fashion brand — from a product URL to a carousel post on Facebook and Instagram.",
+    description: "Full-stack app that fully automates social media posting for Sakkas Store, a fashion brand — from a product URL to a carousel post on Facebook and Instagram.",
     tech: ["Next.js", "Supabase", "Postgres", "pg_cron", "Shopify Admin API", "Meta Graph API", "Claude API", "Telegram Bot API", "Vercel"],
     emoji: "📣",
     color: "#ec4899",
